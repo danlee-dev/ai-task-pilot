@@ -1,168 +1,174 @@
-.page {
-  --gray-rgb: 0, 0, 0;
-  --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
-  --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
+/* page.module.css – 개선된 OpenAI 느낌의 다크모드 디자인 */
 
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-
-  display: grid;
-  grid-template-rows: 20px 1fr 20px;
-  align-items: center;
-  justify-items: center;
-  min-height: 100svh;
-  padding: 80px;
-  gap: 64px;
-  font-family: var(--font-geist-sans);
-}
-
-@media (prefers-color-scheme: dark) {
-  .page {
-    --gray-rgb: 255, 255, 255;
-    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
-    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-  }
-}
-
-.main {
+.homeContainer {
+  background-color: #121212;
+  color: white;
+  min-height: 100vh;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  grid-row-start: 2;
+  transition: background 0.3s, color 0.3s;
 }
 
-.main ol {
-  font-family: var(--font-geist-mono);
-  padding-left: 0;
-  margin: 0;
-  font-size: 14px;
-  line-height: 24px;
-  letter-spacing: -0.01em;
-  list-style-position: inside;
-}
-
-.main li:not(:last-of-type) {
-  margin-bottom: 8px;
-}
-
-.main code {
-  font-family: inherit;
-  background: var(--gray-alpha-100);
-  padding: 2px 4px;
-  border-radius: 4px;
-  font-weight: 600;
-}
-
-.ctas {
+/* 헤더 스타일 개선 */
+.header {
   display: flex;
-  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px;
+  height: auto;
 }
 
-.ctas a {
-  appearance: none;
-  border-radius: 128px;
-  height: 48px;
-  padding: 0 20px;
+.headerLeft, .headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.headerLeft {
+  gap: 20px;
+}
+
+.headerRight {
+  gap: 8px;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 25px;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.sidebarButton, .searchButton {
+  background: transparent;
   border: none;
-  border: 1px solid transparent;
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border-color 0.2s;
-  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  line-height: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sidebarButton:hover, .searchButton:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.loginButton {
+  background-color: rgba(52, 53, 65, 0.7);
+  border: 1px solid rgba(86, 88, 105, 0.5);
+  color: #fff;
+  border-radius: 18px;
+  padding: 6px 16px;
+  font-size: 14px;
   font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  height: 40px;
+  width: 80px;
 }
 
-a.primary {
-  background: var(--foreground);
-  color: var(--background);
-  gap: 8px;
+.loginButton:hover {
+  background-color: rgba(52, 53, 65, 1);
 }
 
-a.secondary {
-  border-color: var(--gray-alpha-200);
-  min-width: 158px;
-}
-
-.footer {
-  grid-row-start: 3;
+/* 메인 콘텐츠 */
+.mainContent {
   display: flex;
-  gap: 24px;
-}
-
-.footer a {
-  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 0 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  margin-top: 0;
+  text-align: center;
+}
+
+.inputContainer {
+  width: 100%;
+  max-width: 760px;
+  margin-bottom: 24px;
+}
+
+/* 하단 액션 버튼 */
+.actions {
+  display: flex;
   gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 12px;
 }
 
-.footer img {
-  flex-shrink: 0;
+.actionButton {
+  border: 1px solid rgba(86, 88, 105, 0.5);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: rgba(217, 217, 227, 0.8);
+  background-color: transparent;
+  transition: background 0.2s, border-color 0.2s;
+  cursor: pointer;
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
-
-  .footer a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
+.actionButton:hover {
+  background-color: rgba(52, 53, 65, 0.7);
+  border-color: rgba(86, 88, 105, 0.8);
 }
 
-@media (max-width: 600px) {
-  .page {
-    padding: 32px;
-    padding-bottom: 80px;
-  }
-
-  .main {
+/* TaskInput 컴포넌트와의 호환성을 위한 추가 스타일 */
+:global {
+  .inputWrapper {
+    border: 1px solid rgba(86, 88, 105, 0.5);
+    border-radius: 12px;
+    background-color: rgba(52, 53, 65, 0.7);
+    padding: 14px;
+    display: flex;
     align-items: center;
+    width: 100%;
   }
 
-  .main ol {
-    text-align: center;
+  .textarea {
+    background: transparent;
+    border: none;
+    color: white;
+    flex: 1;
+    font-size: 16px;
+    line-height: 1.5;
+    max-height: 200px;
+    outline: none;
+    resize: none;
+    width: 100%;
   }
 
-  .ctas {
-    flex-direction: column;
+  .textarea::placeholder {
+    color: rgba(217, 217, 227, 0.5);
   }
 
-  .ctas a {
-    font-size: 14px;
-    height: 40px;
-    padding: 0 16px;
-  }
-
-  a.secondary {
-    min-width: auto;
-  }
-
-  .footer {
-    flex-wrap: wrap;
+  .sendButton {
+    background-color: transparent;
+    border: none;
+    color: rgba(217, 217, 227, 0.8);
+    cursor: pointer;
+    margin-left: 8px;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
     align-items: center;
     justify-content: center;
   }
-}
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
+  .sendButton:hover {
+    background-color: rgba(255, 255, 255, 0.1);
   }
 }

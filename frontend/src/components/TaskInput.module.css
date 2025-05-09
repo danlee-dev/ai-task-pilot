@@ -1,0 +1,58 @@
+.inputWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  background-color: #1e1e1e;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  resize: none;
+  outline: none;
+  line-height: 1.5;
+  min-height: 80px;
+  max-height: 160px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.textarea::placeholder {
+  transform: translateY(10px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.animatePlaceholder::placeholder {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.sendButton {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 999px;
+  color: #ccc;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sendButton:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+}
