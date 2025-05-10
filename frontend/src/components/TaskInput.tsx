@@ -13,14 +13,17 @@ const placeholders = [
 
 export default function TaskInput({
   onSubmit,
+  onInputStart, // 입력 시작 시 호출될 함수 추가
 }: {
   onSubmit: (value: string) => void;
+  onInputStart?: () => void; // 옵셔널 prop
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [animate, setAnimate] = useState(false);
   const [isComposing, setIsComposing] = useState(false); // 한글 조합 중 여부
   const [activeTab, setActiveTab] = useState(0);
+  const [hasStartedTyping, setHasStartedTyping] = useState(false); // 입력 시작 여부 상태 추가
   const labels = ["auto", "select"];
 
   // Placeholder animation
@@ -39,6 +42,15 @@ export default function TaskInput({
   const handleInput = () => {
     const el = textareaRef.current;
     if (el) {
+      // 첫 입력 감지
+      if (!hasStartedTyping && el.value.trim().length > 0) {
+        setHasStartedTyping(true);
+        // 입력 시작 이벤트 발생
+        if (onInputStart) {
+          onInputStart();
+        }
+      }
+
       el.style.height = "auto";
       el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
     }
@@ -52,6 +64,7 @@ export default function TaskInput({
       onSubmit(value);
       textareaRef.current!.value = "";
       textareaRef.current!.style.height = "auto";
+      // 입력 완료 후에도 typing 상태는 유지 (이미 UI가 변경됨)
     }
   };
 
@@ -65,6 +78,7 @@ export default function TaskInput({
         placeholder={placeholders[placeholderIndex]}
         rows={1}
         onInput={handleInput}
+        onChange={handleInput} // onChange 이벤트도 추가하여 텍스트 입력 감지 강화
         onCompositionStart={() => setIsComposing(true)} // 조합 시작
         onCompositionEnd={() => setIsComposing(false)} // 조합 끝
         onKeyDown={(e) => {

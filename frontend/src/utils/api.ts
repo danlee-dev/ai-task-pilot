@@ -1,4 +1,3 @@
-// utils/api.ts
 export async function sendChat(messages: { role: string; content: string }[]) {
   const response = await fetch("http://localhost:8000/api/chat", {
     method: "POST",
@@ -13,5 +12,5 @@ export async function sendChat(messages: { role: string; content: string }[]) {
   }
 
   const data = await response.json();
-  return data.message; // { role, content }
+  return data.message; // 이미 content가 포함되어 있음
 }
