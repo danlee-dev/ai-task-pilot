@@ -7,12 +7,12 @@
   background-color: #1e1e1e;
   border-radius: 20px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   box-sizing: border-box;
 }
 
 .textarea {
-  flex: 1;
+  width: 100%; /* inherit → 100% */
   background: transparent;
   border: none;
   color: white;
@@ -38,7 +38,6 @@
 }
 
 .sendButton {
-  position: absolute;
   bottom: 12px;
   right: 12px;
   background-color: rgba(255, 255, 255, 0.08);
@@ -54,5 +53,53 @@
 
 .sendButton:hover {
   background-color: rgba(255, 255, 255, 0.15);
+  color: #2dd4bf;
+}
+.underChatbox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: auto;
+  width: inherit;
+}
+.toggleBtn {
+  position: relative;
+  display: flex;
+  background-color: #121212;
+  border-radius: 10px;
+  padding: 3px;
+  gap: 0;
+  width: fit-content;
+  overflow: hidden;
+}
+
+.toggleBtn > button {
+  flex: 1;
+  padding: 6px 16px;
+  border: none;
+  background: none;
   color: white;
+  border-radius: 10px;
+  font-size: 14px;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.toggleBtn > button.active {
+  color: #2dd4bf;
+  font-weight: 500;
+}
+
+.indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+  z-index: 0;
 }

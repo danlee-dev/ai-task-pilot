@@ -19,35 +19,23 @@ export default function TaskInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [animate, setAnimate] = useState(false);
+  const [isComposing, setIsComposing] = useState(false); // 한글 조합 중 여부
+  const [activeTab, setActiveTab] = useState(0);
+  const labels = ["auto", "select"];
 
+  // Placeholder animation
   useEffect(() => {
-    setAnimate(false); // 초기값
-
     const interval = setInterval(() => {
-      setAnimate(false); // 사라짐 준비 (아래로 초기화)
-
+      setAnimate(false);
       setTimeout(() => {
         setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
-        setAnimate(true); // 보여지기 시작 (위로 올라옴)
-      }, 100); // 빠르게 교체
-
-    }, 4000);
-
+        setAnimate(true);
+      }, 200);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key == "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      const value = textareaRef.current?.value.trim();
-      if (value) {
-        onSubmit(value);
-        textareaRef.current!.value = ""; //'!' : Non-null assertion op -> obviously textareaRef.current is not NULL(When use ts)
-        textareaRef.current!.style.height = "auto";
-      }
-    }
-  };
-
+  // 자동 리사이즈
   const handleInput = () => {
     const el = textareaRef.current;
     if (el) {
@@ -56,30 +44,63 @@ export default function TaskInput({
     }
   };
 
+  // Submit 처리
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const value = textareaRef.current?.value.trim();
+    if (value) {
+      onSubmit(value);
+      textareaRef.current!.value = "";
+      textareaRef.current!.style.height = "auto";
+    }
+  };
+
   return (
-    <label className={styles.inputWrapper} htmlFor="userTask">
+    <form className={styles.inputWrapper} onSubmit={handleSubmit}>
       <textarea
         ref={textareaRef}
-        className={`${styles.textarea} ${animate ? styles.animatePlaceholder : ""}`}
+        className={`${styles.textarea} ${
+          animate ? styles.animatePlaceholder : ""
+        }`}
         placeholder={placeholders[placeholderIndex]}
         rows={1}
-        onKeyDown={handleKeyDown}
         onInput={handleInput}
-      />
-      <button
-        type="button"
-        className={styles.sendButton}
-        onClick={() => {
-          const value = textareaRef.current?.value.trim();
-          if (value) {
-            onSubmit(value);
-            textareaRef.current!.value = "";
-            textareaRef.current!.style.height = "auto";
+        onCompositionStart={() => setIsComposing(true)} // 조합 시작
+        onCompositionEnd={() => setIsComposing(false)} // 조합 끝
+        onKeyDown={(e) => {
+          if (isComposing) return; // 한글 조합 중이면 무시
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            (e.currentTarget.form as HTMLFormElement)?.requestSubmit();
           }
         }}
-      >
-        <ArrowUpIcon />
-      </button>
-    </label>
+      />
+      <div className={styles.underChatbox}>
+        <div className={styles.toggleBtn}>
+          <div
+            className={styles.indicator}
+            style={{ transform: `translateX(${activeTab * 100}%)` }}
+          />
+          {labels.map((label, i) => (
+            <button
+              key={label}
+              className={activeTab === i ? styles.active : ""}
+              onClick={() => setActiveTab(i)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          className={styles.sendButton}
+          onClick={() => {
+            (textareaRef.current?.form as HTMLFormElement)?.requestSubmit();
+          }}
+        >
+          <ArrowUpIcon />
+        </button>
+      </div>
+    </form>
   );
 }
