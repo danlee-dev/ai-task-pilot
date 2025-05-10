@@ -4,7 +4,6 @@
   background-color: #121212;
   color: white;
   min-height: 100vh;
-  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   display: flex;
   flex-direction: column;
   transition: background 0.3s, color 0.3s;
@@ -37,6 +36,8 @@
   font-size: 25px;
   margin: 0;
   letter-spacing: -0.5px;
+  cursor: pointer;
+  color: white;
 }
 
 .sidebarButton, .searchButton {
@@ -50,10 +51,12 @@
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.2s;
+  color: #a19d9db4;
 }
 
 .sidebarButton:hover, .searchButton:hover {
   background-color: rgba(255, 255, 255, 0.05);
+  color: #2dd4bf;
 }
 
 .loginButton {
@@ -72,6 +75,7 @@
 
 .loginButton:hover {
   background-color: rgba(52, 53, 65, 1);
+  color: #2dd4bf;
 }
 
 /* 메인 콘텐츠 */
@@ -88,11 +92,14 @@
 }
 
 .title {
-  font-size: 32px;
+  font-size: 4rem;
   font-weight: 600;
-  margin-bottom: 20px;
   margin-top: 0;
   text-align: center;
+}
+.subTitle {
+  margin-bottom: 30px;
+  color: rgb(145, 145, 145);
 }
 
 .inputContainer {
@@ -171,4 +178,66 @@
   .sendButton:hover {
     background-color: rgba(255, 255, 255, 0.1);
   }
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: margin-top 0.3s ease;
+}
+
+.alignCenter {
+  transform: translateY(0);
+}
+
+.alignBottom {
+  transform: translateY(33%);
+}
+
+.chatBox {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.userBubble {
+  align-self: flex-end;
+  background-color: #4f4f4f;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 16px 16px 0 16px;
+  max-width: 80%;
+}
+
+.botBubble {
+  align-self: flex-start;
+  background-color: #2a2a2a;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 16px 16px 16px 0;
+  max-width: 80%;
+}
+
+.upperSection {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: column;
+  width: 50vw;
+  text-align: center;
+  height: 40vh;
+  padding-bottom: 10px;
+}
+
+.underSection {
+  width: 70vw;
+  height: 50vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
 }
