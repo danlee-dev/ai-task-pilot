@@ -99,10 +99,44 @@
 }
 
 .inputContainer {
+  position: relative;
   width: 100%;
+}
+
+/* AI 모델 토글 스타일 */
+.modelToggle {
   display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.modelBtn {
+  padding: 6px 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 12px;
+  color: #f1f1f1;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modelBtn.active {
+  background-color: #2dd4bf;
+  color: #222;
+  font-weight: 500;
+}
+
+.modelBtn:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.shortcutHint {
+  margin-left: 10px;
+  font-size: 12px;
+  color: #888;
+  opacity: 0.7;
 }
 
 /* 타이핑 이펙트 토글 버튼 스타일 */
@@ -177,5 +211,14 @@
 @media (max-width: 480px) {
   .inputSection {
     padding: 15px 10px;
+  }
+
+  .modelToggle {
+    margin-bottom: 8px;
+  }
+
+  .modelBtn {
+    padding: 4px 10px;
+    font-size: 13px;
   }
 }

@@ -6,8 +6,8 @@ import Sidebar from "@/components/layout/Sidebar";
 import HeroSection from "@/components/home/HeroSection";
 import ChatBox from "@/components/chat/ChatBox";
 import InputSection from "@/components/input/InputSection";
-import { useChatState } from "@/hooks/useChatState";
 import { useLayout } from "@/contexts/LayoutContext";
+import { useChat } from "@/contexts/ChatContext";
 
 export default function Home() {
   const {
@@ -19,7 +19,7 @@ export default function Home() {
     typingEffectEnabled,
     handleSubmit,
     handleActionClick,
-  } = useChatState();
+  } = useChat();
 
   const { isSidebarOpen } = useLayout();
 

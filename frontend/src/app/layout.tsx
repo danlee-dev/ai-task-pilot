@@ -1,6 +1,7 @@
 "use client";
 import "./globals.css";
 import { LayoutProvider } from "@/contexts/LayoutContext";
+import { ChatProvider } from "@/contexts/ChatContext";
 
 export default function RootLayout({
   children,
@@ -15,7 +16,9 @@ export default function RootLayout({
       </head>
       <body className="app-body">
         <LayoutProvider>
-          {children}
+          <ChatProvider>
+            {children}
+          </ChatProvider>
         </LayoutProvider>
       </body>
     </html>
