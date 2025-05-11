@@ -10,6 +10,11 @@
   position: relative;
   background-color: #181818;
   z-index: 20;
+  transition: padding-left 0.3s ease-in-out;
+}
+
+.header.shifted {
+  padding-left: 320px; /* 사이드바 너비(280px) + 원래 패딩(40px) */
 }
 
 .headerLeft,
@@ -82,11 +87,19 @@
   .header {
     padding: 20px 20px;
   }
+
+  .header.shifted {
+    padding-left: 300px; /* 사이드바 너비(280px) + 작은 화면 패딩(20px) */
+  }
 }
 
 @media (max-width: 480px) {
   .header {
     padding: 15px 15px;
+  }
+
+  .header.shifted {
+    padding-left: 295px; /* 사이드바 너비(280px) + 더 작은 화면 패딩(15px) */
   }
 
   .logo {

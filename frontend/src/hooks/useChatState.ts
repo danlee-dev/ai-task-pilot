@@ -1,20 +1,34 @@
 // 8. src/hooks/useChatState.ts
-// 채팅 관련 상태 및 로직을 관리하는 커스텀 훅
-import { useState } from "react";
+// Custom hook for managing chat state and logic
+import { useState, useEffect } from "react";
 import { sendChat } from "@/utils/api";
+import { Message } from "@/types/chat";
 
-interface Message {
-  role: string;
-  content: string;
+// UI 상태를 나타내는 열거형
+export enum ChatUIState {
+  Initial = "initial", // 초기 상태 (입력창이 중앙에 있음)
+  Animating = "animating", // 애니메이션 중
+  Active = "active", // 채팅 활성화 상태 (입력창이 하단에 있음)
 }
 
 export const useChatState = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [hasResponse, setHasResponse] = useState<boolean>(false);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [uiState, setUIState] = useState<ChatUIState>(ChatUIState.Initial);
   const [heroOpacity, setHeroOpacity] = useState<number>(1);
   const [typingEffectEnabled] = useState<boolean>(true);
+
+  // 상태 전환 시 타이밍 조정
+  useEffect(() => {
+    // Animating 상태가 되면 일정 시간 후 Active 상태로 전환
+    if (uiState === ChatUIState.Animating) {
+      const timer = setTimeout(() => {
+        setUIState(ChatUIState.Active);
+      }, 800); // 애니메이션 지속 시간과 일치시킴
+
+      return () => clearTimeout(timer);
+    }
+  }, [uiState]);
 
   // 채팅 입력 처리
   const handleSubmit = async (text: string) => {
@@ -29,33 +43,20 @@ export const useChatState = () => {
     // 새 사용자 메시지 추가
     const userMessage: Message = { role: "user", content: text };
     const updatedMessages = [...messages, userMessage];
-
-    // API 요청을 위한 전체 메시지
     const fullMessages = [systemPrompt, ...updatedMessages];
 
     // 화면에 표시할 메시지 업데이트
     setMessages(updatedMessages);
     setIsLoading(true);
 
-    // UI 애니메이션 처리
-    if (!hasResponse) {
-      // 타이틀 영역 페이드 아웃
-      setHeroOpacity(0);
+    // 첫 메시지인 경우 UI 상태 전환 및 애니메이션 시작
+    if (uiState === ChatUIState.Initial) {
+      setHeroOpacity(0); // 로고 페이드 아웃
 
-      // 애니메이션 시작
+      // 약간의 지연 후 애니메이션 시작 (페이드아웃 효과가 먼저 시작되도록)
       setTimeout(() => {
-        setIsAnimating(true);
-
-        // 애니메이션 완료 후 상태 전환
-        setTimeout(() => {
-          setHasResponse(true);
-
-          // 애니메이션 상태 해제
-          setTimeout(() => {
-            setIsAnimating(false);
-          }, 100);
-        }, 700);
-      }, 200);
+        setUIState(ChatUIState.Animating); // 애니메이션 시작
+      }, 50);
     }
 
     try {
@@ -91,30 +92,23 @@ export const useChatState = () => {
     };
 
     if (actionPrompts[action]) {
-      console.log(`Selected action: ${action}`);
-      // 여기에 TaskInput 컴포넌트에 프롬프트를 전달하는 로직 추가
+      // 추후 구현: TaskInput에 프롬프트 전달
     }
   };
 
-  // 현재 상태에 따른 클래스 결정
-  const getContentClassName = (baseClass: string): string => {
-    if (isAnimating) {
-      return `${baseClass} ${baseClass}--animating`;
-    } else if (hasResponse) {
-      return `${baseClass} ${baseClass}--chatActive`;
-    }
-    return `${baseClass} ${baseClass}--centered`;
-  };
+  // 애니메이션 상태 확인 헬퍼
+  const isAnimating = uiState === ChatUIState.Animating;
+  const hasResponse = uiState === ChatUIState.Active;
 
   return {
     messages,
     isLoading,
-    hasResponse,
     isAnimating,
+    hasResponse,
     heroOpacity,
     typingEffectEnabled,
     handleSubmit,
     handleActionClick,
-    getContentClassName,
+    uiState,
   };
 };

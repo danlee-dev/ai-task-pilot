@@ -1,23 +1,29 @@
 import Link from "next/link";
 import SidebarIcon from "@/components/icons/SidebarIcon";
 import SearchIcon from "@/components/icons/SearchIcon";
-import styles from "./Header.module.css"; // 스타일 분리
+import styles from "./Header.module.css";
+import { useLayout } from "@/contexts/LayoutContext";
 
-interface HeaderProps {
-  title?: string; // 선택적 제목
-  className?: string;
-}
+const Header: React.FC = () => {
+  const { isSidebarOpen, toggleSidebar } = useLayout();
 
-const Header: React.FC<HeaderProps> = () => {
+  const headerClass = isSidebarOpen
+    ? `${styles.header} ${styles.shifted}`
+    : styles.header;
+
   return (
-    <header className={styles.header}>
+    <header className={headerClass}>
       <div className={styles.headerLeft}>
+        <button
+          className={styles.sidebarButton}
+          aria-label="Toggle sidebar"
+          onClick={toggleSidebar}
+        >
+          <SidebarIcon />
+        </button>
         <Link href="/">
           <h1 className={styles.logo}>AI TaskPilot</h1>
         </Link>
-        <button className={styles.sidebarButton} aria-label="Toggle sidebar">
-          <SidebarIcon />
-        </button>
       </div>
       <div className={styles.headerRight}>
         <button className={styles.searchButton} aria-label="Search">

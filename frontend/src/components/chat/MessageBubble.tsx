@@ -1,13 +1,9 @@
-// 3. src/components/chat/MessageBubble.tsx
-// TypingEffect와 MarkdownRenderer를 사용하는 메시지 버블 컴포넌트
+// src/components/chat/MessageBubble.tsx
+// Message bubble component using TypingEffect and MarkdownRenderer
 import TypingEffect from "@/components/TypingEffect";
 import MarkdownRenderer from "@/components/markdown/MarkdownRenderer";
-import styles from "./MessageBubble.module.css"; // 스타일 분리
-
-interface Message {
-  role: string;
-  content: string;
-}
+import styles from "./MessageBubble.module.css";
+import { Message } from "@/types/chat";
 
 interface MessageBubbleProps {
   message: Message;
@@ -20,7 +16,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
 }) => {
   const isAI = message.role === "assistant";
 
-  // AI 응답이고 타이핑 이펙트가 활성화된 경우 타이핑 이펙트 적용
+  // Apply typing effect for AI responses when enabled
   if (isAI && typingEnabled) {
     return (
       <div className={styles.botBubble}>
@@ -33,7 +29,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     );
   }
 
-  // 사용자 메시지이거나 타이핑 이펙트가 비활성화된 경우 공통 마크다운 렌더러 사용
+  // Use standard markdown renderer for user messages or when typing effect is disabled
   return (
     <div
       className={message.role === "user" ? styles.userBubble : styles.botBubble}

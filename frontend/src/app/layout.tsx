@@ -1,19 +1,23 @@
-import type { Metadata } from "next";
+"use client";
 import "./globals.css";
-
-export const metadata: Metadata = {
-  title: "AI TaskPilot",
-  description: "Tell us your task. We'll fly the best AIs for you",
-};
+import { LayoutProvider } from "@/contexts/LayoutContext";
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className="app-body">{children}</body>
+      <head>
+        <title>AI TaskPilot</title>
+        <meta name="description" content="Tell us your task. We'll fly the best AIs for you" />
+      </head>
+      <body className="app-body">
+        <LayoutProvider>
+          {children}
+        </LayoutProvider>
+      </body>
     </html>
   );
 }

@@ -1,14 +1,13 @@
-
-// 6. src/components/actions/ActionBar.tsx
+// src/components/actions/ActionBar.tsx
 import ActionButton from "./ActionButton";
-import styles from "./ActionBar.module.css"; // 스타일 분리
+import styles from "./ActionBar.module.css";
 
 interface ActionBarProps {
   onActionClick: (action: string) => void;
 }
 
 const ActionBar: React.FC<ActionBarProps> = ({ onActionClick }) => {
-  // 액션 버튼 목록
+  // Action button list
   const actionButtons = [
     "Solve with Auto Analysis",
     "Talk with AI Partner",
