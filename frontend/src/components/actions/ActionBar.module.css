@@ -1,0 +1,25 @@
+/* ActionBar.module.css */
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 12px;
+  width: 100%;
+  max-width: 760px;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .actions {
+    gap: 4px;
+  }
+}

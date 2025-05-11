@@ -1,0 +1,141 @@
+/* TypingEffect.module.css */
+
+.typingContainer {
+  position: relative;
+  line-height: 1.6;
+  width: 100%;
+}
+
+/* 깜빡이는 커서 */
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background-color: #2dd4bf;
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* 코드 블록 스타일링 */
+.codeShell {
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 16px 0;
+  font-family: "Menlo", "Monaco", "Courier New", monospace;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #333;
+}
+
+.codeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #2d2d2d;
+  border-bottom: 1px solid #333;
+}
+
+.languageLabel {
+  font-size: 14px;
+  color: #afafaf;
+  font-weight: 500;
+}
+
+.copyButton {
+  background-color: transparent;
+  border: 1px solid #444;
+  color: #afafaf;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.copyButton:hover {
+  background-color: rgba(45, 212, 191, 0.1);
+  color: #2dd4bf;
+  border-color: #2dd4bf;
+}
+
+.codeContent {
+  padding: 0;
+  margin: 0;
+}
+
+/* 인라인 코드 스타일링 */
+.inlineCode {
+  background-color: rgba(52, 53, 65, 0.7);
+  color: #e6e6e6;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-family: "Menlo", "Monaco", "Courier New", monospace;
+  font-size: 14px;
+}
+
+/* 제목 스타일링 */
+.headingOne {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 28px;
+  margin-bottom: 16px;
+  color: #ffffff;
+  border-bottom: 1px solid #333;
+  padding-bottom: 8px;
+}
+
+.headingTwo {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 14px;
+  color: #ffffff;
+}
+
+.headingThree {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 12px;
+  color: #ffffff;
+}
+
+/* 목록 스타일링 */
+.bulletList,
+.numberedList {
+  margin: 16px 0;
+  padding-left: 32px;
+}
+
+.listItem {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+/* 노트 블록 스타일링 */
+.noteBlock {
+  background-color: rgba(97, 175, 239, 0.1);
+  border-left: 4px solid #61afef;
+  padding: 12px 16px;
+  margin: 16px 0;
+  border-radius: 0 4px 4px 0;
+}
+
+/* 타이핑 이펙트 적용 시 방지할 요소 (코드 블록 등) */
+.typingContainer pre,
+.typingContainer code,
+.typingContainer table {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
