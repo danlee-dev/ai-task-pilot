@@ -1,4 +1,51 @@
-.env
-/data
-/__pycache__
+# Python bytecode
+*.pyc
+*.pyo
+*.pyd
 
+# 일반적인 __pycache__ 디렉토리 (재확인용)
+__pycache__/
+**/__pycache__/
+
+# Virtual environment 디렉토리
+.venv/
+venv/
+env/
+
+# Jupyter Notebook checkpoint
+.ipynb_checkpoints/
+
+# VSCode 설정
+.vscode/
+
+# 환경 변수 파일
+.env
+.env.*
+
+# 테스트 결과
+htmlcov/
+.coverage
+.cache/
+.tox/
+nosetests.xml
+pytest_cache/
+
+# 빌드 디렉토리
+build/
+dist/
+*.egg-info/
+
+# 시스템 파일
+.DS_Store
+Thumbs.db
+
+# 로그 파일
+*.log
+
+# 데이터/백업
+*.sqlite3
+*.bak
+*.tmp
+
+# 기타 IDE 설정
+.idea/
