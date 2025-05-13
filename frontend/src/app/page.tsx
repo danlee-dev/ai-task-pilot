@@ -1,49 +1,100 @@
+// src/app/page.tsx
 "use client";
+import { useEffect } from "react";
 import styles from "./page.module.css";
-import SidebarIcon from "@/components/icons/SidebarIcon";
-import SearchIcon from "@/components/icons/SearchIcon";
-import TaskInput from "@/components/TaskInput";
+import Header from "@/components/layout/Header";
+import Sidebar from "@/components/layout/Sidebar";
+import HeroSection from "@/components/home/HeroSection";
+import ChatBox from "@/components/chat/ChatBox";
+import InputSection from "@/components/input/InputSection";
+import { useLayout } from "@/contexts/LayoutContext";
+import { useChat } from "@/contexts/ChatContext";
 
 export default function Home() {
-  const handleSubmit = (text: string) => {
-    console.log("사용자가 입력한 텍스트:", text);
-    // 여기에 API 호출 등 원하는 동작 추가
+  const {
+    messages,
+    isLoading,
+    isAnimating,
+    hasResponse,
+    heroOpacity,
+    typingEffectEnabled,
+    handleSubmit,
+    handleActionClick,
+  } = useChat();
+
+  const { isSidebarOpen, closeSidebar, windowWidth, isMobile, sidebarWidth } =
+    useLayout();
+
+  // 화면이 너무 좁아지면 사이드바 자동으로 닫기 (LayoutContext로 이동된 기능)
+  useEffect(() => {
+    if (windowWidth <= 768 && isSidebarOpen) {
+      closeSidebar();
+    }
+  }, [windowWidth, isSidebarOpen, closeSidebar]);
+
+  // CSS 클래스 결정
+  const containerClass = isSidebarOpen
+    ? `${styles.homeContainer} ${styles.shifted}`
+    : styles.homeContainer;
+
+  // 입력창의 상태에 따른 클래스 결정
+  const getInputSectionClass = () => {
+    if (isAnimating) {
+      return styles.animating;
+    } else if (hasResponse) {
+      return styles.chatActive;
+    } else {
+      return styles.centered;
+    }
   };
+
+  // 사이드바가 열려있을 때 메인 컨텐츠 영역 스타일 계산
+  const getMainWrapperStyle = () => {
+    if (isSidebarOpen && !isMobile) {
+      return {
+        maxWidth: `min(850px, calc(100% - 40px))`,
+        marginLeft: `${sidebarWidth}px`,
+      };
+    }
+    return {};
+  };
+
   return (
-    <main className={styles.homeContainer}>
-      {/* Header */}
-      <header className={styles.header}>
-        <div className={styles.headerLeft}>
-          <h1 className={styles.logo}>AI TaskPilot</h1>
-          <button className={styles.sidebarButton}>
-            <SidebarIcon size={18} color="#a19d9db4"/>
-          </button>
-        </div>
-        <div className={styles.headerRight}>
-          <button className={styles.searchButton}>
-            <SearchIcon size={18} color="#a19d9db4"/>
-          </button>
-          <button className={styles.loginButton}>
-            Log in
-          </button>
-        </div>
-      </header>
+    <div className={styles.appContainer}>
+      <Header />
+      <Sidebar />
 
-      {/* Main Section */}
-      <section className={styles.mainContent}>
-        <h2 className={styles.title}>What can I help with?</h2>
-        <div className={styles.inputContainer}>
-          <TaskInput onSubmit={handleSubmit} />
-        </div>
+      <main className={containerClass}>
+        <div className={styles.mainWrapper} style={getMainWrapperStyle()}>
+          {/* 로고 섹션 */}
+          <div
+            className={`${styles.logoContainer} ${
+              hasResponse ? styles.fadeOutLogo : ""
+            }`}
+          >
+            <HeroSection opacity={heroOpacity} />
+          </div>
 
-        <div className={styles.actions}>
-          <button className={styles.actionButton}>Search with ChatGPT</button>
-          <button className={styles.actionButton}>Talk with ChatGPT</button>
-          <button className={styles.actionButton}>Research</button>
-          <button className={styles.actionButton}>Sora</button>
-          <button className={styles.actionButton}>More</button>
+          {/* 채팅 메시지 영역 */}
+          {hasResponse && (
+            <div className={styles.chatBoxWrapper}>
+              <ChatBox
+                messages={messages}
+                isLoading={isLoading}
+                typingEffectEnabled={typingEffectEnabled}
+              />
+            </div>
+          )}
+
+          {/* 입력 섹션 */}
+          <div className={`${styles.mainContent} ${getInputSectionClass()}`}>
+            <InputSection
+              onSubmit={handleSubmit}
+              onActionClick={handleActionClick}
+            />
+          </div>
         </div>
-      </section>
-    </main>
+      </main>
+    </div>
   );
 }

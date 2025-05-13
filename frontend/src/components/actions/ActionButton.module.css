@@ -1,0 +1,46 @@
+/* ActionButton.module.css */
+.actionButton {
+  border: 1px solid rgba(86, 88, 105, 0.5);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: rgba(217, 217, 227, 0.8);
+  background-color: rgba(40, 40, 45, 0.5);
+  transition: all 0.2s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.actionButton:hover {
+  background-color: rgba(52, 53, 65, 0.7);
+  border-color: rgba(86, 88, 105, 0.8);
+  color: #2dd4bf;
+}
+
+.actionButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.3);
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .actionButton {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .actionButton {
+    padding: 5px 10px;
+    font-size: 11px;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 375px) {
+  .actionButton {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}

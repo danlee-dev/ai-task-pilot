@@ -1,132 +1,168 @@
-/* page.module.css – 개선된 OpenAI 느낌의 다크모드 디자인 */
+/* page.module.css - 레이아웃 시스템 재설계 */
 
-.homeContainer {
-  background-color: #121212;
-  color: white;
-  min-height: 100vh;
-  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+/* 기본 컨테이너 스타일 */
+.appContainer {
   display: flex;
   flex-direction: column;
-  transition: background 0.3s, color 0.3s;
-}
-
-/* 헤더 스타일 개선 */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 20px;
-  height: auto;
-}
-
-.headerLeft, .headerRight {
-  display: flex;
-  align-items: center;
-}
-
-.headerLeft {
-  gap: 20px;
-}
-
-.headerRight {
-  gap: 8px;
-}
-
-.logo {
-  font-weight: 700;
-  font-size: 25px;
-  margin: 0;
-  letter-spacing: -0.5px;
-}
-
-.sidebarButton, .searchButton {
-  background: transparent;
-  border: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.sidebarButton:hover, .searchButton:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.loginButton {
-  background-color: rgba(52, 53, 65, 0.7);
-  border: 1px solid rgba(86, 88, 105, 0.5);
-  color: #fff;
-  border-radius: 18px;
-  padding: 6px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
-  height: 40px;
-  width: 80px;
-}
-
-.loginButton:hover {
-  background-color: rgba(52, 53, 65, 1);
-}
-
-/* 메인 콘텐츠 */
-.mainContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  padding: 0 20px;
-  max-width: 800px;
-  margin: 0 auto;
+  height: 100vh;
   width: 100%;
+  overflow: hidden; /* 스크롤 방지 */
+  position: relative;
 }
 
-.title {
-  font-size: 32px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  margin-top: 0;
+/* 메인 컨테이너 - 사이드바 상태에 따라 조정 */
+.homeContainer {
+  position: relative;
+  background-color: #181818;
+  color: white;
+  height: calc(100vh - 70px); /* 헤더 높이 70px 제외 */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  transition: padding-left 0.3s ease, margin-left 0.3s ease;
+  overflow-y: auto; /* 필요한 경우에만 스크롤 */
+  overflow-x: hidden;
+}
+
+/* 사이드바 열렸을 때 메인 컨테이너 */
+.homeContainer.shifted {
+  margin-left: 0; /* 마진은 JavaScript에서 동적으로 조정 */
+  padding-left: 0; /* 패딩도 제거 */
+}
+
+/* 메인 콘텐츠 영역 */
+.mainWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  height: 100%; /* 부모 높이에 맞춤 */
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* 가로 방향 전환 효과 */
+  transition: all 0.3s ease;
+}
+
+/* 로고 컨테이너 */
+.logoContainer {
+  position: absolute;
+  top: 25%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  z-index: 1;
+  /* 페이드 아웃만 처리 */
+  transition: opacity 0.8s ease;
 }
 
+/* 로고 페이드 아웃 */
+.fadeOutLogo {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 메인 콘텐츠 영역 - 입력창 등 */
+.mainContent {
+  width: 100%;
+  max-width: 950px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+}
+
+/* 초기 상태 - 중앙 정렬 */
+.centered {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  /* 세로 이동 애니메이션 설정 */
+  transition: top 0s ease, bottom 0s ease;
+}
+
+/* 채팅 활성화 상태 - 하단 정렬 */
+.chatActive {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  /* 세로 이동 애니메이션 설정 */
+  transition: top 0s ease, bottom 0s ease;
+}
+
+/* 애니메이션 중 상태 */
+.animating {
+  position: absolute;
+  z-index: 10;
+  animation: moveInputBox 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 채팅 메시지 영역 */
+.chatBoxWrapper {
+  width: 100%;
+  max-width: 950px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  animation: fadeIn 0.4s ease forwards;
+  animation-delay: 0.6s;
+}
+
+/* 페이드인 애니메이션 */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* 입력창 위치 이동 애니메이션 */
+@keyframes moveInputBox {
+  0% {
+    top: 45%;
+    bottom: auto;
+  }
+  100% {
+    top: auto;
+    bottom: 20px;
+  }
+}
+
+/* 입력 영역 스타일 */
 .inputContainer {
   width: 100%;
-  max-width: 760px;
-  margin-bottom: 24px;
+  max-width: 950px;
 }
 
-/* 하단 액션 버튼 */
-.actions {
+/* 스크롤 버튼 */
+.upArrowButton {
+  position: absolute;
+  right: 20px;
+  bottom: -50px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #343541;
+  color: #fff;
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
-  margin-top: 12px;
-}
-
-.actionButton {
-  border: 1px solid rgba(86, 88, 105, 0.5);
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-size: 14px;
-  color: rgba(217, 217, 227, 0.8);
-  background-color: transparent;
-  transition: background 0.2s, border-color 0.2s;
+  border: none;
   cursor: pointer;
 }
 
-.actionButton:hover {
-  background-color: rgba(52, 53, 65, 0.7);
-  border-color: rgba(86, 88, 105, 0.8);
-}
-
-/* TaskInput 컴포넌트와의 호환성을 위한 추가 스타일 */
+/* Global styles for TaskInput component compatibility */
 :global {
   .inputWrapper {
     border: 1px solid rgba(86, 88, 105, 0.5);
@@ -136,6 +172,12 @@
     display: flex;
     align-items: center;
     width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .inputWrapper:focus-within {
+    border-color: rgba(45, 212, 191, 0.5);
+    box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.1);
   }
 
   .textarea {
@@ -166,9 +208,92 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s;
   }
 
   .sendButton:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(45, 212, 191, 0.1);
+    color: #2dd4bf;
+  }
+}
+
+/* 반응형 스타일 */
+@media (max-width: 1200px) {
+  .homeContainer.shifted {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .mainWrapper {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .homeContainer.shifted {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .mainWrapper {
+    max-width: 900px;
+    padding: 0 15px;
+  }
+
+  .mainContent {
+    max-width: 850px;
+  }
+
+  .chatBoxWrapper {
+    max-width: 850px;
+  }
+}
+
+@media (max-width: 996px) {
+  .homeContainer.shifted {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .mainWrapper {
+    max-width: 800px;
+  }
+
+  .mainContent {
+    max-width: 750px;
+  }
+
+  .chatBoxWrapper {
+    max-width: 750px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainWrapper {
+    max-width: 700px;
+    padding: 0 15px;
+  }
+
+  .homeContainer.shifted {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .mainContent {
+    max-width: 650px;
+  }
+
+  .chatBoxWrapper {
+    max-width: 650px;
+  }
+}
+
+@media (max-width: 576px) {
+  .mainContent {
+    max-width: 100%;
+  }
+
+  .chatBoxWrapper {
+    max-width: 100%;
   }
 }

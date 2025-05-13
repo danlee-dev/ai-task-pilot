@@ -1,0 +1,323 @@
+/* Header.module.css */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  height: 70px;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  background-color: #181818;
+  z-index: 20;
+  transition: padding-left 0.3s ease-in-out;
+}
+
+/* 사이드바가 열렸을 때 헤더 상태 */
+.header.shifted {
+  padding-left: 20px; /* 사이드바 너비는 별도로 처리되므로 일반 패딩만 적용 */
+}
+
+/* 사이드바가 열렸을 때는 왼쪽 요소들 숨김 */
+.header.shifted .headerLeft {
+  /* opacity: 0;
+  visibility: hidden; */
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 사이드바가 열렸을 때 로고만 숨김, 토글 버튼은 유지 */
+.header.shifted .headerLogo {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  position: absolute;
+}
+
+.headerLeft,
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.headerLeft {
+  gap: 20px;
+  transition: opacity 0.3s ease;
+}
+
+.headerRight {
+  gap: 8px;
+}
+
+/* 헤더 로고 */
+.headerLogo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.logoText {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+/* 사이드바 토글 버튼 */
+.sidebarButton {
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #a19d9db4;
+  position: relative;
+  z-index: 10; /* 사이드바보다 낮은 z-index */
+  left: -20px;
+}
+
+.sidebarButton:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #2dd4bf;
+}
+
+/* 검색 관련 스타일 */
+.searchContainer {
+  position: relative;
+}
+
+.searchButton {
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #a19d9db4;
+}
+
+.searchButton:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #2dd4bf;
+}
+
+.searchModal {
+  position: absolute;
+  top: 46px;
+  right: 0;
+  width: 300px;
+  background-color: #202020;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 12px;
+  animation: slideDown 0.2s ease-out;
+  z-index: 100;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.searchModal form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.searchInput {
+  flex: 1;
+  background-color: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  padding: 10px 12px;
+  color: #fff;
+  font-size: 14px;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #2dd4bf;
+  background-color: #333;
+  box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.15);
+}
+
+.searchSubmitButton {
+  background-color: #2dd4bf;
+  color: #111;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: all 0.2s ease;
+}
+
+.searchSubmitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #1e8278;
+}
+
+.searchSubmitButton:hover:not(:disabled) {
+  background-color: #26c0ad;
+  transform: translateY(-1px);
+}
+
+/* AI 모델 전환 버튼 */
+.aiSwitchButton {
+  display: flex;
+  align-items: center;
+  background-color: rgba(52, 53, 65, 0.7);
+  border: 1px solid rgba(86, 88, 105, 0.5);
+  border-radius: 18px;
+  padding: 6px 12px;
+  gap: 8px;
+  height: 36px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 8px;
+}
+
+.aiSwitchButton:hover {
+  background-color: rgba(52, 53, 65, 1);
+  border-color: #2dd4bf;
+}
+
+.aiSwitchButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.aiIcon {
+  font-weight: 600;
+  font-size: 13px;
+  padding: 4px 6px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.aiIcon.gpt {
+  background-color: #10a37f;
+}
+
+.aiIcon.claude {
+  background-color: #7f5af0;
+}
+
+.switchText {
+  font-size: 12px;
+  color: #a19d9db4;
+  display: none;
+}
+
+.aiSwitchButton:hover .switchText {
+  color: #fff;
+}
+
+/* 큰 화면에서만 텍스트 표시 */
+@media (min-width: 768px) {
+  .switchText {
+    display: block;
+  }
+
+  .aiSwitchButton {
+    padding: 6px 12px;
+  }
+}
+
+.loginButton {
+  background-color: rgba(52, 53, 65, 0.7);
+  border: 1px solid rgba(86, 88, 105, 0.5);
+  color: #fff;
+  border-radius: 18px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  height: 36px;
+}
+
+.loginButton:hover {
+  background-color: rgba(52, 53, 65, 1);
+  color: #2dd4bf;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 1200px) {
+  .header.shifted {
+    padding-left: 20px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .header.shifted {
+    padding-left: 20px;
+  }
+}
+
+@media (max-width: 996px) {
+  .header.shifted {
+    padding-left: 20px;
+  }
+
+  .logoText {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 20px 20px;
+  }
+
+  .header.shifted {
+    padding-left: 20px;
+  }
+
+  .logoText {
+    font-size: 20px;
+  }
+
+  .searchModal {
+    width: 250px;
+    right: -10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 15px 15px;
+  }
+
+  .header.shifted {
+    padding-left: 295px; /* 사이드바 너비(280px) + 더 작은 화면 패딩(15px) */
+  }
+
+  .searchModal {
+    width: 200px;
+  }
+}

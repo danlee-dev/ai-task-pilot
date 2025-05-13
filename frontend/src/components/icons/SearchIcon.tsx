@@ -1,4 +1,4 @@
-export default function SearchIcon({ size = 20, color = "currentColor" }) {
+export default function SearchIcon({ size = 18, color = "currentColor" }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

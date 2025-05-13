@@ -1,28 +1,278 @@
 /* global.css */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+  --code-rendering: "inactive";
+}
+
+html[style*="--code-rendering:active"] pre,
+html[style*="--code-rendering:active"] code,
+:root[style*="--code-rendering:active"] pre,
+:root[style*="--code-rendering:active"] code {
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
 }
 
 html,
-app-body {
+body,
+.app-body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
-  background-color: #ffffff;
-  color: #000000;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  margin: 0;
-  padding: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: #181818;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+body {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 @media (prefers-color-scheme: dark) {
   html,
-  app-body {
+  body,
+  .app-body {
     background-color: #121212;
     color: #ffffff;
   }
+}
+
+a {
+  text-decoration: none;
+}
+
+/* KaTeX 전역 스타일 */
+.katex-display {
+  margin: 1em 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5em 0;
+  text-align: center !important;
+}
+
+.katex {
+  text-rendering: auto;
+  font-size: 1.1em !important;
+}
+
+/* 수식이 길어질 경우 가로 스크롤 지원 */
+.katex-display > .katex {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5em 0;
+  white-space: normal !important;
+}
+
+/* KaTeX 수식 색상 조정 (다크 모드) */
+.katex {
+  color: #e0e0e0;
+}
+
+/* KaTeX 특수 명령어 처리 개선 */
+.katex .mord,
+.katex .mbin,
+.katex .mrel {
+  transition: all 0.1s ease;
+}
+
+/* KaTeX 에러 숨기기 */
+.katex-error {
+  display: none !important;
+}
+
+/* 특수 명령어 관련 */
+.katex .mathbf {
+  font-weight: bold;
+}
+
+/* 코드 블록 렌더링 스타일 */
+pre > code {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+pre[class*="language-"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  background: #1e1e1e !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  max-width: 100% !important;
+  display: block !important;
+}
+
+/* SyntaxHighlighter 즉시 렌더링 처리 */
+.react-syntax-highlighter-pre {
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  overflow-x: visible !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: none !important;
+}
+
+/* SyntaxHighlighter 코드 줄바꿈 처리 */
+.react-syntax-highlighter-line-number {
+  opacity: 1 !important;
+  white-space: pre-wrap !important;
+  visibility: visible !important;
+}
+
+/* SyntaxHighlighter 내부 코드 줄바꿈 */
+code[class*="language-"] {
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* 코드 블록 애니메이션 방지 */
+.prism-code {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: opacity;
+  white-space: pre-wrap !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+/* 문서 로드 시 모든 코드 블록 렌더링 보장 */
+body::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 1px,
+    rgba(0, 0, 0, 0.0001) 1px,
+    rgba(0, 0, 0, 0.0001) 2px
+  );
+}
+
+/* SyntaxHighlighter 추가 스타일 */
+.token {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* 반짝임 애니메이션 방지 */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+code,
+pre {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* 코드 블록 즉시 렌더링 */
+.react-syntax-highlighter-pre,
+pre[class*="language-"],
+code[class*="language-"],
+.token,
+.prism-code {
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: inline-block !important; /* inline-block으로 변경하여 줄바꿈과 함께 인라인 표시 */
+  transition: none !important;
+  animation: none !important;
+  transform: none !important;
+  width: auto !important;
+  max-width: 100% !important;
+}
+
+/* 인라인 코드는 inline-block으로 표시 */
+:not(pre) > code {
+  display: inline-block !important;
+}
+
+/* 코드 블록은 block으로 표시 */
+pre,
+pre > code {
+  display: block !important;
+  width: 100% !important;
+}
+
+/* 마크다운 리스트 항목 스타일 */
+ul,
+ol {
+  display: block !important;
+  margin-left: 0 !important;
+  padding-left: 20px !important;
+  margin-block-start: 1em !important;
+  margin-block-end: 1em !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+li {
+  display: list-item !important;
+  margin-left: 20px !important;
+  padding-left: 5px !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  text-align: left !important;
+}
+
+/* 불릿 포인트 스타일 고정 */
+ul > li {
+  list-style-type: disc !important;
+  list-style-position: outside !important;
+}
+
+ul > li::before {
+  content: none !important;
+}
+
+ol > li {
+  list-style-type: decimal !important;
+  list-style-position: outside !important;
+}
+
+/* 리스트 2단계 이상 스타일 */
+ul ul,
+ol ul {
+  list-style-type: circle !important;
+}
+
+ul ul ul,
+ol ul ul,
+ol ol ul,
+ul ol ul {
+  list-style-type: square !important;
+}
+
+/* 불릿 포인트가 보이도록 마진 확보 */
+ul,
+ol {
+  margin-inline-start: 10px !important;
 }

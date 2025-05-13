@@ -1,0 +1,669 @@
+/* Sidebar.module.css */
+.sidebarContainer {
+  position: relative;
+  z-index: 999;
+  isolation: isolate; /* 새로운 쌓임 맥락 생성 */
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px; /* 숨겨진 상태 */
+  width: 300px;
+  height: 100vh;
+  background-color: #1a1a1a;
+  transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1002; /* z-index 증가 */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  contain: layout style; /* 성능 최적화 */
+}
+
+.open {
+  left: 0; /* 열릴 때 왼쪽에서 등장 */
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 1001; /* z-index 증가 */
+  display: none; /* 기본적으로는 표시하지 않음 */
+  pointer-events: auto; /* 클릭 이벤트 수신 */
+  touch-action: none; /* 모바일에서 터치 이벤트 최적화 */
+}
+
+/* 780px 이하에서만 백드롭 표시 */
+@media (max-width: 780px) {
+  .backdrop {
+    display: block;
+  }
+}
+
+.sidebarContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 0; /* 헤더 높이 패딩 제거 */
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #484848 #1a1a1a;
+}
+
+.sidebarContent::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebarContent::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.sidebarContent::-webkit-scrollbar-thumb {
+  background-color: #484848;
+  border-radius: 6px;
+}
+
+/* 사이드바 헤더 영역 */
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  position: relative;
+  height: 70px; /* 헤더와 동일한 높이 */
+}
+
+/* 사이드바 토글 버튼 */
+.sidebarToggleButton {
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #a19d9db4;
+  position: absolute;
+  left: 20px;
+  z-index: 10;
+}
+
+.sidebarToggleButton:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #2dd4bf;
+}
+
+/* 로고 스타일 */
+.logoWrapper {
+  padding: 20px 20px 10px 20px; /* 헤더와 동일한 좌우 패딩 */
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 8px;
+  width: 100%;
+  height: 70px; /* 헤더와 동일한 높이 */
+}
+
+.appLogo {
+  display: flex;
+  align-items: center;
+  margin-left: 76px; /* 헤더의 로고 위치와 일치하도록 조정 */
+}
+
+.logoText {
+  font-size: 24px; /* 헤더와 동일한 로고 크기 */
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+/* 검색 입력창 */
+.searchContainer {
+  margin: 8px 12px 16px;
+  position: relative;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background-color: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  color: #e0e0e0;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #2dd4bf;
+  background-color: #333;
+  box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.15);
+}
+
+.searchInput::placeholder {
+  color: #8e8e8e;
+  opacity: 0.8;
+}
+
+/* 상단 새 채팅 버튼 */
+.newChatButton {
+  display: flex;
+  align-items: center;
+  margin: 8px 12px 12px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: #2dd4bf;
+  color: #111;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s;
+  text-align: left;
+  gap: 12px;
+}
+
+.newChatButton:hover {
+  background-color: #26c0ad;
+  transform: translateY(-1px);
+}
+
+.newChatButton svg {
+  color: #111;
+}
+
+/* 프롬프트 템플릿 관련 스타일 */
+.templatesContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0 12px;
+  gap: 8px;
+  margin-bottom: 8px;
+  animation: fadeIn 0.2s ease;
+}
+
+.templateCard {
+  display: flex;
+  align-items: center;
+  background-color: #262626;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  position: relative;
+  gap: 12px;
+}
+
+.templateCard:hover {
+  background-color: #2f2f2f;
+}
+
+.templateIcon {
+  width: 32px;
+  height: 32px;
+  background-color: rgba(45, 212, 191, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2dd4bf;
+}
+
+.templateInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.templateTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+.templateHint {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 2px;
+}
+
+.templateCard svg:last-child {
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.templateCard:hover svg:last-child {
+  color: #2dd4bf;
+}
+
+/* 별표 버튼 스타일 */
+.starButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: transform 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+.starButton:hover {
+  color: #2dd4bf;
+  transform: scale(1.2);
+}
+
+.starButton.starred {
+  color: #2dd4bf;
+}
+
+.starButton.starred svg {
+  fill: #2dd4bf;
+}
+
+.templateCard .starButton svg {
+  stroke-width: 1.5;
+  transition: fill 0.2s ease, color 0.2s ease;
+}
+
+/* 섹션 헤더 */
+.sectionHeader {
+  padding: 10px 16px;
+  font-size: 12px;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease;
+}
+
+.sectionHeader:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.expandIcon {
+  font-size: 8px;
+  transition: transform 0.2s ease;
+  color: #666;
+  display: inline-block;
+}
+
+.expandIcon.expanded {
+  transform: rotate(90deg);
+}
+
+.moreButton {
+  color: #8e8ea0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.moreButton:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #fff;
+}
+
+/* 채팅 리스트 */
+.listContainer {
+  padding: 0 8px;
+  margin: 4px 0;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.itemList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItem {
+  margin: 2px 0;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+
+.listItem:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.listItem.active {
+  background-color: rgba(45, 212, 191, 0.15);
+}
+
+.itemLink {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  color: #e0e0e0;
+  text-decoration: none;
+  transition: color 0.15s ease;
+  font-size: 14px;
+  width: 100%;
+  gap: 12px;
+}
+
+.active .itemLink {
+  color: #2dd4bf;
+}
+
+.itemIcon {
+  display: flex;
+  color: #8e8ea0;
+  flex-shrink: 0;
+}
+
+.active .itemIcon {
+  color: #2dd4bf;
+}
+
+.itemText {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 폴더 섹션 */
+.foldersSection {
+  margin-top: 16px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.foldersList {
+  padding: 0 16px;
+}
+
+.folderItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  color: #e0e0e0;
+  font-size: 14px;
+  border-radius: 6px;
+  margin: 4px 0;
+  gap: 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.folderItem:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.folderItem svg {
+  color: #8e8ea0;
+}
+
+/* 사용자 프로필 영역 */
+.userSection {
+  margin-top: auto;
+  padding: 16px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.userProfileContainer {
+  position: relative;
+}
+
+.userButton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #222;
+  color: #e0e0e0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  gap: 12px;
+}
+
+.userButton:hover {
+  background-color: #2a2a2a;
+}
+
+.userAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #2dd4bf;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.userName {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userPlan {
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+}
+
+/* 사용자 메뉴 스타일 */
+.userMenu {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  width: 100%;
+  background-color: #222;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: slideUp 0.2s ease-out;
+  z-index: 100;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.userMenuHeader {
+  padding: 12px 16px;
+  background-color: #2a2a2a;
+}
+
+.userMenuEmail {
+  font-size: 13px;
+  color: #ccc;
+  display: block;
+  text-align: left;
+  word-break: break-all;
+}
+
+.userMenuDivider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 0;
+}
+
+.userMenuList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.userMenuItem {
+  margin: 0;
+}
+
+.userMenuLink {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: #e0e0e0;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.userMenuLink:hover {
+  background-color: #2a2a2a;
+}
+
+.userMenuLink svg {
+  color: #8e8ea0;
+}
+
+.userMenuLink:hover svg {
+  color: #2dd4bf;
+}
+
+.addButton {
+  color: #8e8ea0;
+}
+
+.addButton:hover {
+  color: #2dd4bf;
+}
+
+/* 반응형 조정 */
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 280px;
+    left: -280px;
+  }
+
+  .logoWrapper {
+    padding: 0 15px;
+  }
+
+  .appLogo {
+    margin-left: 71px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .sidebar {
+    width: 250px;
+    left: -250px;
+  }
+
+  .logoWrapper {
+    padding: 0 15px;
+  }
+
+  .appLogo {
+    margin-left: 71px;
+  }
+
+  .logoText {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 996px) {
+  .sidebar {
+    width: 200px;
+    left: -200px;
+  }
+
+  .logoWrapper {
+    padding: 0 10px;
+  }
+
+  .appLogo {
+    margin-left: 66px;
+  }
+
+  .logoText {
+    font-size: 20px;
+  }
+
+  .templateTitle {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+    left: -200px;
+  }
+
+  .logoWrapper {
+    padding: 0 10px;
+  }
+
+  .appLogo {
+    margin-left: 56px;
+  }
+
+  .logoText {
+    font-size: 20px;
+  }
+
+  .templateIcon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .templateTitle {
+    font-size: 12px;
+  }
+}
