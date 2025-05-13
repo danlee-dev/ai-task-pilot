@@ -1,0 +1,429 @@
+import React, { useState, useRef, useEffect } from "react";
+import styles from "./Sidebar.module.css";
+import Link from "next/link";
+import { useLayout } from "@/contexts/LayoutContext";
+
+// 아이콘 컴포넌트 임포트
+import ChatIcon from "../icons/ChatIcon";
+import FolderIcon from "../icons/FolderIcon";
+import PlusIcon from "../icons/PlusIcon";
+import DotsIcon from "../icons/DotsIcon";
+import LightbulbIcon from "../icons/LightbulbIcon";
+import CodeIcon from "../icons/CodeIcon";
+import BookIcon from "../icons/BookIcon";
+import StarIcon from "../icons/StarIcon";
+import SettingsIcon from "../icons/SettingsIcon";
+import LogoutIcon from "../icons/LogoutIcon";
+
+// 템플릿 데이터 타입 정의
+interface PromptTemplate {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+  prompt: string;
+  starred?: boolean;
+}
+
+// 템플릿 데이터 초기값
+const initialPromptTemplates: PromptTemplate[] = [
+  {
+    id: "t1",
+    title: "코드 리뷰 및 개선",
+    icon: <CodeIcon />,
+    prompt: "다음 코드를 검토하고 개선점을 제안해주세요:",
+  },
+  {
+    id: "t2",
+    title: "개념 설명",
+    icon: <BookIcon />,
+    prompt: "다음 개념에 대해 자세히 설명해주세요:",
+  },
+  {
+    id: "t3",
+    title: "아이디어 브레인스토밍",
+    icon: <LightbulbIcon />,
+    prompt: "다음 주제에 대한 아이디어를 5개 제안해주세요:",
+  },
+];
+
+// 채팅 및 폴더 리스트 데이터
+const recentChats = [
+  { id: "r1", name: "Clarification Request", icon: <ChatIcon /> },
+  { id: "r2", name: "User Input Clarification", icon: <ChatIcon /> },
+  { id: "r3", name: "New chat", icon: <ChatIcon /> },
+];
+
+const olderChats = [
+  { id: "y1", name: "Clarification Request", icon: <ChatIcon /> },
+  { id: "y2", name: "User Input Clarification", icon: <ChatIcon /> },
+];
+
+export default function Sidebar() {
+  const { isSidebarOpen, closeSidebar } = useLayout();
+  const [activeChatId, setActiveChatId] = useState("r1");
+  const [expandedSections, setExpandedSections] = useState({
+    templates: true,
+    today: true,
+    yesterday: true,
+    pastWeek: true,
+  });
+  const [hoveredTemplate, setHoveredTemplate] = useState<string | null>(null);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [promptTemplates, setPromptTemplates] = useState<PromptTemplate[]>([]);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const userButtonRef = useRef<HTMLButtonElement>(null);
+
+  // 로컬 스토리지에서 템플릿 상태 로드
+  useEffect(() => {
+    const savedTemplates = localStorage.getItem("starredTemplates");
+    if (savedTemplates) {
+      try {
+        const savedStarredIds = JSON.parse(savedTemplates) as string[];
+        const templatesWithStarred = initialPromptTemplates.map((template) => ({
+          ...template,
+          starred: savedStarredIds.includes(template.id),
+        }));
+        setPromptTemplates(sortTemplatesByStarred(templatesWithStarred));
+      } catch (error) {
+        console.error("템플릿 상태를 불러오는 중 오류가 발생했습니다:", error);
+        setPromptTemplates(initialPromptTemplates);
+      }
+    } else {
+      setPromptTemplates(initialPromptTemplates);
+    }
+  }, []);
+
+  // 별표 표시된 템플릿을 위쪽으로 정렬하는 함수
+  const sortTemplatesByStarred = (
+    templates: PromptTemplate[]
+  ): PromptTemplate[] => {
+    return [...templates].sort((a, b) => {
+      if (a.starred && !b.starred) return -1;
+      if (!a.starred && b.starred) return 1;
+      return 0;
+    });
+  };
+
+  // 별표 상태 토글 함수
+  const toggleStarred = (e: React.MouseEvent, templateId: string) => {
+    e.stopPropagation(); // 클릭 이벤트가 부모 요소로 전파되는 것을 방지
+
+    const updatedTemplates = promptTemplates.map((template) => {
+      if (template.id === templateId) {
+        return { ...template, starred: !template.starred };
+      }
+      return template;
+    });
+
+    // 별표 상태 정렬 및 업데이트
+    const sortedTemplates = sortTemplatesByStarred(updatedTemplates);
+    setPromptTemplates(sortedTemplates);
+
+    // 별표 표시된 템플릿 ID 목록 저장
+    const starredIds = sortedTemplates
+      .filter((template) => template.starred)
+      .map((template) => template.id);
+
+    localStorage.setItem("starredTemplates", JSON.stringify(starredIds));
+  };
+
+  const toggleSection = (
+    section: "templates" | "today" | "yesterday" | "pastWeek"
+  ) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
+
+  const sidebarClass = isSidebarOpen
+    ? `${styles.sidebar} ${styles.open}`
+    : styles.sidebar;
+
+  const handleChatClick = (id: string) => {
+    setActiveChatId(id);
+    // 모바일에서는 채팅 선택 시, 사이드바 닫기
+    if (window.innerWidth <= 768) {
+      closeSidebar();
+    }
+  };
+
+  const handleTemplateClick = (prompt: string) => {
+    // TODO: 프롬프트를 입력창에 추가하는 로직 구현
+    console.log("템플릿 선택:", prompt);
+    // 모바일에서는 템플릿 선택 시, 사이드바 닫기
+    if (window.innerWidth <= 768) {
+      closeSidebar();
+    }
+  };
+
+  // 유저 메뉴 토글
+  const toggleUserMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsUserMenuOpen(!isUserMenuOpen);
+  };
+
+  // 외부 클릭 감지 - 유저 메뉴 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        userMenuRef.current &&
+        userButtonRef.current &&
+        !userMenuRef.current.contains(event.target as Node) &&
+        !userButtonRef.current.contains(event.target as Node)
+      ) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <>
+      {isSidebarOpen && (
+        <div className={styles.backdrop} onClick={closeSidebar}></div>
+      )}
+      <div className={sidebarClass}>
+        <div className={styles.sidebarContent}>
+          {/* 앱 로고 */}
+          <div className={styles.logoWrapper}>
+            <div className={styles.appLogo}>
+              <span className={styles.logoText}>TaskPilot</span>
+            </div>
+          </div>
+
+          {/* 새 채팅 버튼 */}
+          <button className={styles.newChatButton}>
+            <PlusIcon />
+            <span>New chat</span>
+          </button>
+
+          {/* 검색 입력창 */}
+          <div className={styles.searchContainer}>
+            <input
+              type="text"
+              placeholder="Search conversations..."
+              className={styles.searchInput}
+            />
+          </div>
+
+          {/* 프롬프트 템플릿 섹션 */}
+          <div
+            className={styles.sectionHeader}
+            onClick={() => toggleSection("templates")}
+          >
+            <div className={styles.sectionTitle}>
+              <span
+                className={`${styles.expandIcon} ${
+                  expandedSections.templates ? styles.expanded : ""
+                }`}
+              >
+                ▶
+              </span>
+              자주 사용하는 템플릿
+            </div>
+            <button className={styles.moreButton}>
+              <DotsIcon />
+            </button>
+          </div>
+
+          {expandedSections.templates && (
+            <div className={styles.templatesContainer}>
+              {promptTemplates.map((template) => (
+                <div
+                  key={template.id}
+                  className={styles.templateCard}
+                  onClick={() => handleTemplateClick(template.prompt)}
+                  onMouseEnter={() => setHoveredTemplate(template.id)}
+                  onMouseLeave={() => setHoveredTemplate(null)}
+                >
+                  <div className={styles.templateIcon}>{template.icon}</div>
+                  <div className={styles.templateInfo}>
+                    <span className={styles.templateTitle}>
+                      {template.title}
+                    </span>
+                    {hoveredTemplate === template.id && (
+                      <div className={styles.templateHint}>클릭하여 사용</div>
+                    )}
+                  </div>
+                  <div
+                    className={`${styles.starButton} ${
+                      template.starred ? styles.starred : ""
+                    }`}
+                    onClick={(e) => toggleStarred(e, template.id)}
+                  >
+                    <StarIcon />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* 오늘 섹션 */}
+          <div
+            className={styles.sectionHeader}
+            onClick={() => toggleSection("today")}
+          >
+            <div className={styles.sectionTitle}>
+              <span
+                className={`${styles.expandIcon} ${
+                  expandedSections.today ? styles.expanded : ""
+                }`}
+              >
+                ▶
+              </span>
+              오늘
+            </div>
+            <button className={styles.moreButton}>
+              <DotsIcon />
+            </button>
+          </div>
+
+          {expandedSections.today && (
+            <div className={styles.listContainer}>
+              <ul className={styles.itemList}>
+                {recentChats.map((chat) => (
+                  <li
+                    key={chat.id}
+                    className={`${styles.listItem} ${
+                      activeChatId === chat.id ? styles.active : ""
+                    }`}
+                    onClick={() => handleChatClick(chat.id)}
+                  >
+                    <Link href={`/chat/${chat.id}`} className={styles.itemLink}>
+                      <span className={styles.itemIcon}>{chat.icon}</span>
+                      <span className={styles.itemText}>{chat.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* 어제 섹션 */}
+          <div
+            className={styles.sectionHeader}
+            onClick={() => toggleSection("yesterday")}
+          >
+            <div className={styles.sectionTitle}>
+              <span
+                className={`${styles.expandIcon} ${
+                  expandedSections.yesterday ? styles.expanded : ""
+                }`}
+              >
+                ▶
+              </span>
+              어제
+            </div>
+            <button className={styles.moreButton}>
+              <DotsIcon />
+            </button>
+          </div>
+
+          {expandedSections.yesterday && (
+            <div className={styles.listContainer}>
+              <ul className={styles.itemList}>
+                {olderChats.map((chat) => (
+                  <li
+                    key={chat.id}
+                    className={`${styles.listItem} ${
+                      activeChatId === chat.id ? styles.active : ""
+                    }`}
+                    onClick={() => handleChatClick(chat.id)}
+                  >
+                    <Link href={`/chat/${chat.id}`} className={styles.itemLink}>
+                      <span className={styles.itemIcon}>{chat.icon}</span>
+                      <span className={styles.itemText}>{chat.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* 이전 7일 섹션 */}
+          <div
+            className={styles.sectionHeader}
+            onClick={() => toggleSection("pastWeek")}
+          >
+            <div className={styles.sectionTitle}>
+              <span
+                className={`${styles.expandIcon} ${
+                  expandedSections.pastWeek ? styles.expanded : ""
+                }`}
+              >
+                ▶
+              </span>
+              지난 7일
+            </div>
+          </div>
+
+          {/* 폴더 섹션 */}
+          <div className={styles.foldersSection}>
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionTitle}>폴더</div>
+              <button className={`${styles.addButton} ${styles.moreButton}`}>
+                <PlusIcon />
+              </button>
+            </div>
+            <div className={styles.foldersList}>
+              <div className={styles.folderItem}>
+                <FolderIcon />
+                <span>프로젝트</span>
+              </div>
+              <div className={styles.folderItem}>
+                <FolderIcon />
+                <span>개인 메모</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 사용자 섹션 */}
+          <div className={styles.userSection}>
+            <div className={styles.userProfileContainer}>
+              <button ref={userButtonRef} className={styles.userButton}>
+                <div className={styles.userAvatar}>SM</div>
+                <div className={styles.userInfo}>
+                  <span className={styles.userName}>Seongmin Lee</span>
+                  <span className={styles.userPlan}>Free Plan</span>
+                </div>
+                <div onClick={toggleUserMenu}>
+                  <DotsIcon />
+                </div>
+              </button>
+
+              {isUserMenuOpen && (
+                <div className={styles.userMenu} ref={userMenuRef}>
+                  <div className={styles.userMenuHeader}>
+                    <span className={styles.userMenuEmail}>
+                      fnseongmin11@gmail.com
+                    </span>
+                  </div>
+                  <div className={styles.userMenuDivider}></div>
+                  <ul className={styles.userMenuList}>
+                    <li className={styles.userMenuItem}>
+                      <Link href="/settings" className={styles.userMenuLink}>
+                        <SettingsIcon />
+                        <span>설정</span>
+                      </Link>
+                    </li>
+                    <li className={styles.userMenuItem}>
+                      <Link href="/logout" className={styles.userMenuLink}>
+                        <LogoutIcon />
+                        <span>로그아웃</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

@@ -1,19 +1,24 @@
-import type { Metadata } from "next";
+"use client";
 import "./globals.css";
+import { LayoutProvider } from "@/contexts/LayoutContext";
+import { ChatProvider } from "@/contexts/ChatContext";
+import { ReactNode } from "react";
 
-export const metadata: Metadata = {
-  title: "AI TaskPilot",
-  description: "Tell us your task. We'll fly the best AIs for you",
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className="app-body">{children}</body>
+      <head>
+        <title>AI TaskPilot</title>
+        <meta
+          name="description"
+          content="Tell us your task. We'll fly the best AIs for you"
+        />
+      </head>
+      <body className="app-body">
+        <LayoutProvider>
+          <ChatProvider>{children}</ChatProvider>
+        </LayoutProvider>
+      </body>
     </html>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import ArrowUpIcon from "./icons/ArrowUpIcon";
+import ArrowUpIcon from "../icons/ArrowUpIcon";
 import styles from "./TaskInput.module.css";
 
 const placeholders = [

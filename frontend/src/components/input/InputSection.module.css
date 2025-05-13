@@ -8,12 +8,135 @@
   padding: 20px;
   border-radius: 12px;
   z-index: 10;
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity, position;
+}
+
+/* 초기 상태 - 상단에 위치 */
+.default {
+  position: relative;
+  top: 0;
+  transform: translateY(0);
+}
+
+/* 애니메이션 상태 - 상단에서 하단으로 이동 */
+.animating {
+  position: absolute;
+  animation: moveToBottom 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 채팅 활성화 상태 - 하단에 고정 */
+.chatActive {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 850px;
+  z-index: 10;
+  padding: 0 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* 사이드바 열렸을 때 이동 효과 */
+.inputSection.shifted {
+  transform: translateX(140px);
+}
+
+/* 채팅 활성화 + 사이드바 열림 상태 */
+.chatActive.shifted {
+  transform: translateX(120px);
+}
+
+/* 애니메이션 + 사이드바 열림 상태 */
+.animating.shifted {
+  animation: moveToBottomShifted 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 상단에서 하단으로 이동하는 애니메이션 */
+@keyframes moveToBottom {
+  0% {
+    top: 150px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+  100% {
+    top: auto;
+    bottom: 20px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    max-width: 850px;
+    padding: 0 20px;
+  }
+}
+
+/* 사이드바 열렸을 때의 애니메이션 */
+@keyframes moveToBottomShifted {
+  0% {
+    top: 150px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    transform: translateX(140px);
+  }
+  100% {
+    top: auto;
+    bottom: 20px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    transform: translateX(140px);
+    max-width: 850px;
+    padding: 0 20px;
+  }
 }
 
 .inputContainer {
+  position: relative;
   width: 100%;
-  max-width: 760px;
-  margin-bottom: 24px;
+}
+
+/* AI 모델 토글 스타일 */
+.modelToggle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.modelBtn {
+  padding: 6px 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 12px;
+  color: #f1f1f1;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modelBtn.active {
+  background-color: #2dd4bf;
+  color: #222;
+  font-weight: 500;
+}
+
+.modelBtn:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.shortcutHint {
+  margin-left: 10px;
+  font-size: 12px;
+  color: #888;
+  opacity: 0.7;
 }
 
 /* 타이핑 이펙트 토글 버튼 스타일 */
@@ -48,7 +171,7 @@
 }
 
 .toggleText:before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0;
@@ -60,7 +183,7 @@
 }
 
 .toggleText:after {
-  content: '';
+  content: "";
   position: absolute;
   left: 3px;
   top: 3px;
@@ -88,5 +211,14 @@
 @media (max-width: 480px) {
   .inputSection {
     padding: 15px 10px;
+  }
+
+  .modelToggle {
+    margin-bottom: 8px;
+  }
+
+  .modelBtn {
+    padding: 4px 10px;
+    font-size: 13px;
   }
 }

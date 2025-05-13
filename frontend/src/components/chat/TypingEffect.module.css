@@ -6,26 +6,6 @@
   width: 100%;
 }
 
-/* 깜빡이는 커서 */
-.cursor {
-  display: inline-block;
-  width: 2px;
-  height: 1.2em;
-  background-color: #2dd4bf;
-  margin-left: 2px;
-  vertical-align: middle;
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
 /* 코드 블록 스타일링 */
 .codeShell {
   background-color: #1e1e1e;

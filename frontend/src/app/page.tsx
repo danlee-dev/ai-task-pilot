@@ -2,58 +2,75 @@
 "use client";
 import styles from "./page.module.css";
 import Header from "@/components/layout/Header";
+import Sidebar from "@/components/layout/Sidebar";
 import HeroSection from "@/components/home/HeroSection";
 import ChatBox from "@/components/chat/ChatBox";
 import InputSection from "@/components/input/InputSection";
-import { useChatState } from "@/hooks/useChatState";
+import { useLayout } from "@/contexts/LayoutContext";
+import { useChat } from "@/contexts/ChatContext";
 
 export default function Home() {
   const {
     messages,
     isLoading,
-    hasResponse,
     isAnimating,
+    hasResponse,
     heroOpacity,
     typingEffectEnabled,
     handleSubmit,
     handleActionClick,
-  } = useChatState();
+  } = useChat();
 
-  // 현재 상태에 따른 클래스 결정
-  const getContentClassName = (): string => {
+  const { isSidebarOpen } = useLayout();
+
+  // CSS 클래스 결정
+  const containerClass = isSidebarOpen
+    ? `${styles.homeContainer} ${styles.shifted}`
+    : styles.homeContainer;
+
+  // 입력창의 상태에 따른 클래스 결정
+  const getInputSectionClass = () => {
     if (isAnimating) {
-      return `${styles.mainContent} ${styles.animating}`;
+      return styles.animating;
     } else if (hasResponse) {
-      return `${styles.mainContent} ${styles.chatActive}`;
+      return styles.chatActive;
+    } else {
+      return styles.centered;
     }
-    return `${styles.mainContent} ${styles.centered}`;
   };
 
   return (
-    <main className={styles.homeContainer}>
+    <div className={styles.appContainer}>
       <Header />
+      <Sidebar />
 
-      <div className={styles.mainWrapper}>
-        {/* 히어로 섹션 - 항상 표시하되 opacity로 제어 */}
-        <HeroSection opacity={heroOpacity} />
+      <main className={containerClass}>
+        <div className={styles.mainWrapper}>
+          {/* 로고 섹션 */}
+          <div className={`${styles.logoContainer} ${hasResponse ? styles.fadeOutLogo : ''}`}>
+            <HeroSection opacity={heroOpacity} />
+          </div>
 
-        {/* 채팅 메시지 영역 */}
-        {hasResponse && (
-          <ChatBox
-            messages={messages}
-            isLoading={isLoading}
-            typingEffectEnabled={typingEffectEnabled}
-          />
-        )}
+          {/* 채팅 메시지 영역 */}
+          {hasResponse && (
+            <div className={styles.chatBoxWrapper}>
+              <ChatBox
+                messages={messages}
+                isLoading={isLoading}
+                typingEffectEnabled={typingEffectEnabled}
+              />
+            </div>
+          )}
 
-        {/* 입력창 영역 */}
-        <div className={getContentClassName()}>
-          <InputSection
-            onSubmit={handleSubmit}
-            onActionClick={handleActionClick}
-          />
+          {/* 입력 섹션 */}
+          <div className={`${styles.mainContent} ${getInputSectionClass()}`}>
+            <InputSection
+              onSubmit={handleSubmit}
+              onActionClick={handleActionClick}
+            />
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

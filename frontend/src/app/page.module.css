@@ -1,88 +1,164 @@
-/* page.module.css */
+/* page.module.css - 레이아웃 시스템 재설계 */
+
+/* 기본 컨테이너 스타일 */
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden; /* 스크롤 방지 */
+  position: relative;
+}
+
+/* 메인 컨테이너 - 사이드바 상태에 따라 조정 */
 .homeContainer {
+  position: relative;
   background-color: #181818;
   color: white;
-  min-height: 100vh;
+  height: calc(100vh - 80px); /* 헤더 높이 80px 제외 */
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: background 0.3s, color 0.3s;
-  overflow: hidden;
+  justify-content: center;
+  transition: padding-left 0.3s ease;
+  overflow-y: auto; /* 필요한 경우에만 스크롤 */
+  overflow-x: hidden;
 }
 
+/* 사이드바 열렸을 때 메인 컨테이너 */
+.homeContainer.shifted {
+  padding-left: 200px;
+}
+
+/* 메인 콘텐츠 영역 */
 .mainWrapper {
+  position: relative;
   width: 100%;
   max-width: 850px;
-  height: calc(100vh - 80px);
-  display: flex;
-  flex-direction: column;
-  position: relative;
+  height: 100%; /* 부모 높이에 맞춤 */
   padding: 0 20px;
-  overflow: hidden;
-}
-
-/* Main content - 중앙 및 하단 위치 처리 */
-.mainContent {
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform, opacity;
+  /* 가로 방향 전환 효과 */
+  transition: width 0.3s ease;
 }
 
-/* 센터 상태 - 초기 화면 */
-.centered {
+/* 로고 컨테이너 */
+.logoContainer {
+  position: absolute;
+  top: 25%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  height: 100%;
-  position: relative;
+  text-align: center;
+  z-index: 1;
+  /* 페이드 아웃만 처리 */
+  transition: opacity 0.8s ease;
 }
 
-/* 챗 활성화 상태 - 원래 구조로 복원 */
+/* 로고 페이드 아웃 */
+.fadeOutLogo {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 메인 콘텐츠 영역 - 입력창 등 */
+.mainContent {
+  width: 100%;
+  max-width: 750px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+}
+
+/* 초기 상태 - 중앙 정렬 */
+.centered {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  /* 세로 이동 애니메이션 설정 */
+  transition: top 0s ease, bottom 0s ease;
+}
+
+/* 채팅 활성화 상태 - 하단 정렬 */
 .chatActive {
-  position: fixed;
+  position: absolute;
   bottom: 20px;
   left: 0;
   right: 0;
   margin: 0 auto;
-  max-width: 850px;
-  z-index: 10;
-  padding: 0 20px;
-  background-color: rgba(24, 24, 24, 0.95);
-  border-radius: 12px 12px 0 0;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+  /* 세로 이동 애니메이션 설정 */
+  transition: top 0s ease, bottom 0s ease;
 }
 
-/* 애니메이션 중간 상태 */
+/* 애니메이션 중 상태 */
 .animating {
-  position: fixed;
-  top: 50%;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  max-width: 850px;
+  position: absolute;
   z-index: 10;
-  padding: 0 20px;
-  transform: translate3d(0, -50%, 0);
-  background-color: rgba(24, 24, 24, 0.95);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  animation: moveDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: moveInputBox 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* 애니메이션 키프레임 */
-@keyframes moveDown {
+/* 채팅 메시지 영역 */
+.chatBoxWrapper {
+  width: 100%;
+  max-width: 750px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  animation: fadeIn 0.4s ease forwards;
+  animation-delay: 0.6s;
+}
+
+/* 페이드인 애니메이션 */
+@keyframes fadeIn {
   0% {
-    top: 50%;
-    transform: translate3d(0, -50%, 0);
-    border-radius: 12px;
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* 입력창 위치 이동 애니메이션 */
+@keyframes moveInputBox {
+  0% {
+    top: 45%;
+    bottom: auto;
   }
   100% {
     top: auto;
     bottom: 20px;
-    transform: translate3d(0, 0, 0);
-    border-radius: 12px 12px 0 0;
   }
+}
+
+/* 입력 영역 스타일 */
+.inputContainer {
+  width: 100%;
+  max-width: 750px;
+}
+
+/* 스크롤 버튼 */
+.upArrowButton {
+  position: absolute;
+  right: 20px;
+  bottom: -50px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #343541;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
 }
 
 /* Global styles for TaskInput component compatibility */
@@ -146,7 +222,7 @@
     padding: 0 10px;
   }
 
-  .chatActive {
-    padding: 0 10px;
+  .homeContainer.shifted {
+    padding-left: 250px;
   }
 }

@@ -1,13 +1,9 @@
-// 3. src/components/chat/MessageBubble.tsx
-// TypingEffect와 MarkdownRenderer를 사용하는 메시지 버블 컴포넌트
-import TypingEffect from "@/components/TypingEffect";
+// src/components/chat/MessageBubble.tsx
+// Message bubble component using TypingEffect and MarkdownRenderer
+import TypingEffect from "./TypingEffect";
 import MarkdownRenderer from "@/components/markdown/MarkdownRenderer";
-import styles from "./MessageBubble.module.css"; // 스타일 분리
-
-interface Message {
-  role: string;
-  content: string;
-}
+import styles from "./MessageBubble.module.css";
+import { Message } from "@/contexts/ChatContext"; // 경로 업데이트
 
 interface MessageBubbleProps {
   message: Message;
@@ -19,11 +15,29 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   typingEnabled = true,
 }) => {
   const isAI = message.role === "assistant";
+  const isUser = message.role === "user";
+  const isSystem = message.role === "system";
 
-  // AI 응답이고 타이핑 이펙트가 활성화된 경우 타이핑 이펙트 적용
+  // 시스템 메시지 스타일 적용
+  if (isSystem) {
+    return (
+      <div className={styles.systemBubble}>
+        <div className={styles.messageContent}>
+          <p>{message.content}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Apply typing effect for AI responses when enabled
   if (isAI && typingEnabled) {
     return (
       <div className={styles.botBubble}>
+        {message.ai_model && (
+          <div className={`${styles.aiModelBadge} ${styles[message.ai_model]}`}>
+            {message.ai_model.toUpperCase()}
+          </div>
+        )}
         <TypingEffect
           content={message.content}
           typingSpeed={5}
@@ -33,11 +47,16 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     );
   }
 
-  // 사용자 메시지이거나 타이핑 이펙트가 비활성화된 경우 공통 마크다운 렌더러 사용
+  // Use standard markdown renderer for user messages or when typing effect is disabled
   return (
     <div
-      className={message.role === "user" ? styles.userBubble : styles.botBubble}
+      className={isUser ? styles.userBubble : styles.botBubble}
     >
+      {isAI && message.ai_model && (
+        <div className={`${styles.aiModelBadge} ${styles[message.ai_model]}`}>
+          {message.ai_model.toUpperCase()}
+        </div>
+      )}
       <div className={styles.messageContent}>
         <MarkdownRenderer content={message.content} />
       </div>

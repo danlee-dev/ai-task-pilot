@@ -1,11 +1,11 @@
 /**
  * 2. 수정된 TypingEffect 컴포넌트
- * src/components/TypingEffect.tsx
+ * src/components/chat/TypingEffect.tsx
  */
 
 "use client";
 import React, { useState, useEffect } from "react";
-import { markdownComponents } from "./markdown/MarkdownRenderer";
+import { markdownComponents } from "../markdown/MarkdownRenderer";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import styles from "./TypingEffect.module.css";
@@ -34,7 +34,7 @@ const TypingEffect: React.FC<TypingEffectProps> = ({
 }) => {
   const [displayedContent, setDisplayedContent] = useState<string>("");
   const [, setIsComplete] = useState<boolean>(false);
-  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [, setIsTyping] = useState<boolean>(false);
 
   // 정규식 패턴
   const codeBlockRegex = /```[\s\S]*?```|`[^`\n]+`/g;
@@ -175,7 +175,6 @@ const TypingEffect: React.FC<TypingEffectProps> = ({
       >
         {displayedContent}
       </ReactMarkdown>
-      {isTyping && <span className={styles.cursor}></span>}
     </div>
   );
 };
