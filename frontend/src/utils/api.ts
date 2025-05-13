@@ -36,7 +36,7 @@ export async function sendChat(
 export async function switchAIAndContinue(
   messages: ChatMessage[],
   currentAiModel: string
-): Promise<ChatResponse> {
+): Promise<ChatResponse> { // 아직 값은 없지만 언젠가는 값을 줄거라는 것을 알려주는 것
   const response = await fetch("http://localhost:8000/api/chat/switch", {
     method: "POST",
     headers: {

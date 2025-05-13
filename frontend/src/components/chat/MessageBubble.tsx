@@ -1,6 +1,6 @@
 // src/components/chat/MessageBubble.tsx
 // Message bubble component using TypingEffect and MarkdownRenderer
-import TypingEffect from "@/components/TypingEffect";
+import TypingEffect from "./TypingEffect";
 import MarkdownRenderer from "@/components/markdown/MarkdownRenderer";
 import styles from "./MessageBubble.module.css";
 import { Message } from "@/contexts/ChatContext"; // 경로 업데이트

@@ -2,7 +2,7 @@
 import { useRef, useEffect } from "react";
 import MessageBubble from "./MessageBubble";
 import styles from "./ChatBox.module.css"; // 스타일 분리
-import { Message } from "@/types/chat";
+import { Message } from "@/contexts/ChatContext";
 
 interface ChatBoxProps {
   messages: Message[];

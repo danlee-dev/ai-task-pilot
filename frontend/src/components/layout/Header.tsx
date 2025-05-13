@@ -20,7 +20,7 @@ const Header: React.FC = () => {
   // 모델 전환 핸들러 추가
   const handleSwitchModel = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const targetModel = currentAiModel === 'gpt' ? 'claude' : 'gpt';
+    const targetModel = currentAiModel === "gpt" ? "claude" : "gpt";
     switchAiModel(targetModel);
   };
 
@@ -47,17 +47,25 @@ const Header: React.FC = () => {
 
       // 외부 클릭 감지
       const handleClickOutside = (event: MouseEvent<Document>) => {
-        if (
-          searchInputRef.current &&
-          !searchInputRef.current.contains(event.target as Node)
-        ) {
-          setIsSearchOpen(false);
-        }
+        setTimeout(() => {
+          if (
+            searchInputRef.current &&
+            !searchInputRef.current.contains(event.target as Node)
+          ) {
+            setIsSearchOpen(false);
+          }
+        }, 0);
       };
 
-      document.addEventListener("mousedown", handleClickOutside as unknown as EventListener);
+      document.addEventListener(
+        "click",
+        handleClickOutside as unknown as EventListener
+      );
       return () => {
-        document.removeEventListener("mousedown", handleClickOutside as unknown as EventListener);
+        document.removeEventListener(
+          "click",
+          handleClickOutside as unknown as EventListener
+        );
       };
     }
   }, [isSearchOpen]);
@@ -83,13 +91,15 @@ const Header: React.FC = () => {
           className={styles.aiSwitchButton}
           onClick={handleSwitchModel}
           disabled={isLoading}
-          aria-label={`현재 AI: ${currentAiModel}. 클릭하여 ${currentAiModel === 'gpt' ? 'Claude' : 'GPT'}로 전환`}
+          aria-label={`현재 AI: ${currentAiModel}. 클릭하여 ${
+            currentAiModel === "gpt" ? "Claude" : "GPT"
+          }로 전환`}
         >
           <span className={`${styles.aiIcon} ${styles[currentAiModel]}`}>
-            {currentAiModel === 'gpt' ? 'GPT' : 'Claude'}
+            {currentAiModel === "gpt" ? "GPT" : "Claude"}
           </span>
           <span className={styles.switchText}>
-            Switch to {currentAiModel === 'gpt' ? 'Claude' : 'GPT'}
+            Switch to {currentAiModel === "gpt" ? "Claude" : "GPT"}
           </span>
         </button>
         <div className={styles.searchContainer}>

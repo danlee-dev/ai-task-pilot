@@ -1,5 +1,5 @@
 // src/components/input/InputSection.tsx
-import TaskInput from "@/components/TaskInput";
+import TaskInput from "./TaskInput";
 import ActionBar from "@/components/actions/ActionBar";
 import styles from "./InputSection.module.css";
 import { useChat } from "@/contexts/ChatContext";
