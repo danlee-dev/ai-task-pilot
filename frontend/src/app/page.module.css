@@ -15,32 +15,33 @@
   position: relative;
   background-color: #181818;
   color: white;
-  height: calc(100vh - 80px); /* 헤더 높이 80px 제외 */
+  height: calc(100vh - 70px); /* 헤더 높이 70px 제외 */
   width: 100%;
   display: flex;
   justify-content: center;
-  transition: padding-left 0.3s ease;
+  transition: padding-left 0.3s ease, margin-left 0.3s ease;
   overflow-y: auto; /* 필요한 경우에만 스크롤 */
   overflow-x: hidden;
 }
 
 /* 사이드바 열렸을 때 메인 컨테이너 */
 .homeContainer.shifted {
-  padding-left: 200px;
+  margin-left: 0; /* 마진은 JavaScript에서 동적으로 조정 */
+  padding-left: 0; /* 패딩도 제거 */
 }
 
 /* 메인 콘텐츠 영역 */
 .mainWrapper {
   position: relative;
   width: 100%;
-  max-width: 850px;
+  max-width: 1100px;
   height: 100%; /* 부모 높이에 맞춤 */
   padding: 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   /* 가로 방향 전환 효과 */
-  transition: width 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 /* 로고 컨테이너 */
@@ -68,7 +69,7 @@
 /* 메인 콘텐츠 영역 - 입력창 등 */
 .mainContent {
   width: 100%;
-  max-width: 750px;
+  max-width: 950px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -107,7 +108,7 @@
 /* 채팅 메시지 영역 */
 .chatBoxWrapper {
   width: 100%;
-  max-width: 750px;
+  max-width: 950px;
   margin-bottom: 20px;
   position: relative;
   z-index: 2;
@@ -141,7 +142,7 @@
 /* 입력 영역 스타일 */
 .inputContainer {
   width: 100%;
-  max-width: 750px;
+  max-width: 950px;
 }
 
 /* 스크롤 버튼 */
@@ -217,12 +218,82 @@
 }
 
 /* 반응형 스타일 */
+@media (max-width: 1200px) {
+  .homeContainer.shifted {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .mainWrapper {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .homeContainer.shifted {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .mainWrapper {
+    max-width: 900px;
+    padding: 0 15px;
+  }
+
+  .mainContent {
+    max-width: 850px;
+  }
+
+  .chatBoxWrapper {
+    max-width: 850px;
+  }
+}
+
+@media (max-width: 996px) {
+  .homeContainer.shifted {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .mainWrapper {
+    max-width: 800px;
+  }
+
+  .mainContent {
+    max-width: 750px;
+  }
+
+  .chatBoxWrapper {
+    max-width: 750px;
+  }
+}
+
 @media (max-width: 768px) {
   .mainWrapper {
-    padding: 0 10px;
+    max-width: 700px;
+    padding: 0 15px;
   }
 
   .homeContainer.shifted {
-    padding-left: 250px;
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .mainContent {
+    max-width: 650px;
+  }
+
+  .chatBoxWrapper {
+    max-width: 650px;
+  }
+}
+
+@media (max-width: 576px) {
+  .mainContent {
+    max-width: 100%;
+  }
+
+  .chatBoxWrapper {
+    max-width: 100%;
   }
 }

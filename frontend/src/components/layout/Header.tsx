@@ -24,6 +24,19 @@ const Header: React.FC = () => {
     switchAiModel(targetModel);
   };
 
+  // 사이드바 토글 핸들러 - 이벤트 전파 문제 해결
+  const handleToggleSidebar = (e: MouseEvent<HTMLButtonElement>) => {
+    // 이벤트 전파 중지 및 기본 동작 방지
+    e.preventDefault();
+    e.stopPropagation();
+
+    // 약간의 지연을 주어 다른 이벤트와의 충돌 방지
+    setTimeout(() => {
+      console.log("헤더 토글 버튼 클릭 - 핸들러 내부");
+      toggleSidebar();
+    }, 10);
+  };
+
   // 검색창 토글
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -33,7 +46,7 @@ const Header: React.FC = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      console.log("검색어:", searchQuery);
+      console.log("Search query:", searchQuery);
       // TODO: 실제 검색 기능 구현
       // 예: router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
@@ -71,29 +84,28 @@ const Header: React.FC = () => {
   }, [isSearchOpen]);
 
   return (
-    <header className={headerClass}>
+    <header className={headerClass} onClick={(e) => e.stopPropagation()}>
       <div className={styles.headerLeft}>
         <button
           className={styles.sidebarButton}
           aria-label="Toggle sidebar"
-          onClick={toggleSidebar}
+          onClick={handleToggleSidebar}
         >
           <SidebarIcon />
         </button>
-        {!isSidebarOpen && (
-          <Link href="/" className={styles.headerLogo}>
-            <span className={styles.logoText}>TaskPilot</span>
-          </Link>
-        )}
+
+        <Link href="/" className={styles.headerLogo}>
+          <span className={styles.logoText}>TaskPilot</span>
+        </Link>
       </div>
       <div className={styles.headerRight}>
         <button
           className={styles.aiSwitchButton}
           onClick={handleSwitchModel}
           disabled={isLoading}
-          aria-label={`현재 AI: ${currentAiModel}. 클릭하여 ${
+          aria-label={`Current AI: ${currentAiModel}. Click to switch to ${
             currentAiModel === "gpt" ? "Claude" : "GPT"
-          }로 전환`}
+          }`}
         >
           <span className={`${styles.aiIcon} ${styles[currentAiModel]}`}>
             {currentAiModel === "gpt" ? "GPT" : "Claude"}
@@ -116,7 +128,7 @@ const Header: React.FC = () => {
                 <input
                   ref={searchInputRef}
                   type="text"
-                  placeholder="대화 검색..."
+                  placeholder="Search conversations..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className={styles.searchInput}

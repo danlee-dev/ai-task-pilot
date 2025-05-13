@@ -6,6 +6,22 @@
   width: 100%;
 }
 
+/* 렌더링 상태 스타일 */
+.rendering pre,
+.rendering code {
+  transition: opacity 0.1s ease-in-out;
+}
+
+.rendered pre,
+.rendered code {
+  opacity: 1;
+}
+
+.mathRendered {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 /* 코드 블록 스타일링 */
 .codeShell {
   background-color: #1e1e1e;
@@ -15,6 +31,12 @@
   font-family: "Menlo", "Monaco", "Courier New", monospace;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid #333;
+  max-width: 100%; /* 최대 너비 제한 */
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .codeHeader {
@@ -49,9 +71,66 @@
   border-color: #2dd4bf;
 }
 
+/* 코드 블록 렌더링 스타일 */
+.codeRendering {
+  will-change: opacity, transform;
+  width: 100%; /* 너비 채우기 */
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: none !important;
+  animation: none !important;
+}
+
+.codeRendering pre,
+.codeRendering code {
+  visibility: visible !important;
+  opacity: 1 !important;
+  white-space: pre-wrap !important; /* 코드 자동 줄바꿈 */
+  word-break: break-word !important; /* 긴 단어 줄바꿈 처리 */
+  overflow-wrap: break-word !important; /* 줄바꿈 강제 */
+  max-width: 100%;
+  display: block !important;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  transition: none !important;
+  animation: none !important;
+}
+
+/* 코드 내용 하이라이팅 애니메이션 */
+@keyframes fadeInCode {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .codeContent {
+  animation: none !important;
+  position: relative;
   padding: 0;
   margin: 0;
+  width: 100%; /* 너비 채우기 */
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.codeContent > div,
+.codeContent pre,
+.codeContent code {
+  visibility: visible !important;
+  opacity: 1 !important;
+  white-space: pre-wrap !important; /* 코드 자동 줄바꿈 */
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  overflow-x: visible !important;
+  width: 100%;
+  display: block !important;
 }
 
 /* 인라인 코드 스타일링 */
@@ -116,6 +195,12 @@
 .typingContainer pre,
 .typingContainer code,
 .typingContainer table {
-  opacity: 1;
-  transition: opacity 0.2s ease;
+  opacity: 1 !important;
+  transition: none !important;
+  white-space: pre-wrap !important; /* 코드 자동 줄바꿈 */
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  max-width: 100%;
+  visibility: visible !important;
+  display: block !important;
 }

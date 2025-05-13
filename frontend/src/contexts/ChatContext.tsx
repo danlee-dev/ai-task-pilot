@@ -131,7 +131,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
         const errorMessage: Message = {
           id: uuidv4(),
           role: "system",
-          content: "AI 전환 중 오류가 발생했습니다.",
+          content: "An error occurred while switching AI models.",
           timestamp: new Date(),
         };
 
@@ -227,7 +227,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
       const errorMessage: Message = {
         id: uuidv4(),
         role: "assistant",
-        content: "죄송합니다. 오류가 발생했습니다. 다시 시도해 주세요.",
+        content: "I'm sorry, an error occurred. Please try again.",
         timestamp: new Date(),
         ai_model: currentAiModel,
       };

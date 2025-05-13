@@ -113,7 +113,7 @@ async def switch_ai_and_continue(request: ChatRequest):
         # 모델 전환 성공을 알리는 시스템 메시지 생성
         switch_message = {
             "role": "assistant",
-            "content": f"AI 모델이 {target_model.upper()}로 전환되었습니다. 계속해서 메시지를 입력해주세요.",
+            "content": f"AI model switched to {target_model.upper()}. Please continue with your message.",
             "ai_model": target_model,
         }
 

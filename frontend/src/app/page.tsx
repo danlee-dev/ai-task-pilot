@@ -1,5 +1,6 @@
 // src/app/page.tsx
 "use client";
+import { useEffect } from "react";
 import styles from "./page.module.css";
 import Header from "@/components/layout/Header";
 import Sidebar from "@/components/layout/Sidebar";
@@ -21,7 +22,15 @@ export default function Home() {
     handleActionClick,
   } = useChat();
 
-  const { isSidebarOpen } = useLayout();
+  const { isSidebarOpen, closeSidebar, windowWidth, isMobile, sidebarWidth } =
+    useLayout();
+
+  // 화면이 너무 좁아지면 사이드바 자동으로 닫기 (LayoutContext로 이동된 기능)
+  useEffect(() => {
+    if (windowWidth <= 768 && isSidebarOpen) {
+      closeSidebar();
+    }
+  }, [windowWidth, isSidebarOpen, closeSidebar]);
 
   // CSS 클래스 결정
   const containerClass = isSidebarOpen
@@ -39,15 +48,30 @@ export default function Home() {
     }
   };
 
+  // 사이드바가 열려있을 때 메인 컨텐츠 영역 스타일 계산
+  const getMainWrapperStyle = () => {
+    if (isSidebarOpen && !isMobile) {
+      return {
+        maxWidth: `min(850px, calc(100% - 40px))`,
+        marginLeft: `${sidebarWidth}px`,
+      };
+    }
+    return {};
+  };
+
   return (
     <div className={styles.appContainer}>
       <Header />
       <Sidebar />
 
       <main className={containerClass}>
-        <div className={styles.mainWrapper}>
+        <div className={styles.mainWrapper} style={getMainWrapperStyle()}>
           {/* 로고 섹션 */}
-          <div className={`${styles.logoContainer} ${hasResponse ? styles.fadeOutLogo : ''}`}>
+          <div
+            className={`${styles.logoContainer} ${
+              hasResponse ? styles.fadeOutLogo : ""
+            }`}
+          >
             <HeroSection opacity={heroOpacity} />
           </div>
 
