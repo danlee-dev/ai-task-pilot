@@ -28,21 +28,21 @@ interface PromptTemplate {
 const initialPromptTemplates: PromptTemplate[] = [
   {
     id: "t1",
-    title: "코드 리뷰 및 개선",
+    title: "Code Review",
     icon: <CodeIcon />,
-    prompt: "다음 코드를 검토하고 개선점을 제안해주세요:",
+    prompt: "Please review the following code and suggest improvements:",
   },
   {
     id: "t2",
-    title: "개념 설명",
+    title: "Concept Explanation",
     icon: <BookIcon />,
-    prompt: "다음 개념에 대해 자세히 설명해주세요:",
+    prompt: "Please explain the following concept in detail:",
   },
   {
     id: "t3",
-    title: "아이디어 브레인스토밍",
+    title: "Idea Brainstorming",
     icon: <LightbulbIcon />,
-    prompt: "다음 주제에 대한 아이디어를 5개 제안해주세요:",
+    prompt: "Please suggest 5 ideas for the following topic:",
   },
 ];
 
@@ -86,7 +86,7 @@ export default function Sidebar() {
         }));
         setPromptTemplates(sortTemplatesByStarred(templatesWithStarred));
       } catch (error) {
-        console.error("템플릿 상태를 불러오는 중 오류가 발생했습니다:", error);
+        console.error("Error loading template state:", error);
         setPromptTemplates(initialPromptTemplates);
       }
     } else {
@@ -265,7 +265,7 @@ export default function Sidebar() {
                 >
                   ▶
                 </span>
-                자주 사용하는 템플릿
+                Frequently Used Templates
               </div>
               <button className={styles.moreButton}>
                 <DotsIcon />
@@ -288,7 +288,7 @@ export default function Sidebar() {
                         {template.title}
                       </span>
                       {hoveredTemplate === template.id && (
-                        <div className={styles.templateHint}>클릭하여 사용</div>
+                        <div className={styles.templateHint}>Click to use</div>
                       )}
                     </div>
                     <div
@@ -317,7 +317,7 @@ export default function Sidebar() {
                 >
                   ▶
                 </span>
-                오늘
+                Today
               </div>
               <button className={styles.moreButton}>
                 <DotsIcon />
@@ -361,7 +361,7 @@ export default function Sidebar() {
                 >
                   ▶
                 </span>
-                어제
+                Yesterday
               </div>
               <button className={styles.moreButton}>
                 <DotsIcon />
@@ -405,7 +405,7 @@ export default function Sidebar() {
                 >
                   ▶
                 </span>
-                지난 주
+                Last Week
               </div>
               <button className={styles.moreButton}>
                 <DotsIcon />
@@ -430,7 +430,7 @@ export default function Sidebar() {
                 >
                   <div className={styles.userAvatar}>TP</div>
                   <div className={styles.userInfo}>
-                    <span className={styles.userName}>사용자</span>
+                    <span className={styles.userName}>User</span>
                     <span className={styles.userPlan}>Free Plan</span>
                   </div>
                   <DotsIcon />
@@ -449,13 +449,13 @@ export default function Sidebar() {
                       <li className={styles.userMenuItem}>
                         <Link href="/settings" className={styles.userMenuLink}>
                           <SettingsIcon />
-                          <span>설정</span>
+                          <span>Settings</span>
                         </Link>
                       </li>
                       <li className={styles.userMenuItem}>
                         <Link href="/logout" className={styles.userMenuLink}>
                           <LogoutIcon />
-                          <span>로그아웃</span>
+                          <span>Logout</span>
                         </Link>
                       </li>
                     </ul>

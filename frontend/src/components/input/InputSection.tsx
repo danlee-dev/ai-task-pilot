@@ -21,17 +21,21 @@ const InputSection: React.FC<InputSectionProps> = ({
         <div className={styles.modelToggle}>
           <button
             onClick={() => switchAiModel("gpt")}
-            className={`${styles.modelBtn} ${currentAiModel === "gpt" ? styles.active : ""}`}
+            className={`${styles.modelBtn} ${
+              currentAiModel === "gpt" ? styles.active : ""
+            }`}
           >
             OpenAI
           </button>
           <button
             onClick={() => switchAiModel("claude")}
-            className={`${styles.modelBtn} ${currentAiModel === "claude" ? styles.active : ""}`}
+            className={`${styles.modelBtn} ${
+              currentAiModel === "claude" ? styles.active : ""
+            }`}
           >
             Claude
           </button>
-          <span className={styles.shortcutHint}>Option + Tab으로 전환</span>
+          <span className={styles.shortcutHint}>Switch with Option + Tab</span>
         </div>
         <TaskInput onSubmit={onSubmit} />
       </div>
